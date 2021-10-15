@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit"/>
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit"/>
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <title>合同变量</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .wrap{
+            width: 100%;
+            height: 100%;
+        }
+        .left{
+            width: 70%;
+            height:100%;
+            float: left;
+        }
+        .right{
+            width: 30%;
+            float: right;
+            overflow: scroll;
+            background-color: #f7f7f7;
+            position: fixed;
+            right: 0;
+            top: 0;
+            /*height: auto;*/
+        }
+        .right-top{
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+            font-family: 'Microsoft YaHei UI';
+            font-size: 16px;
+            color: white;
+            line-height: 40px;
+            text-align: center;
+            font-weight: bold
+        }
+        .right-list{
+            width: 96%;
+            min-height: 100px;
+            margin: 0 auto;
+            margin-top: 10px;
+            background-color: #FFFFff;
+        }
+        .variables{
+            width: 94%;
+            height: 40px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #F2F3F7;
+            font-size: 14px;
+            font-family: 'Microsoft YaHei UI';
+            color: #5E6173;font-weight: bold;
+            text-align: left;
+            line-height: 40px;
+            margin: 0 auto;
+        }
+        .Contract{
+            width: 94%;
+            height: 40px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            border-bottom: 1px solid #F2F3F7;
+        }
+        .right-content{
+            width: 96%;
+            min-height: 150px;
+            margin: 0 auto;
+            margin-top: 10px;
+            background-color: #FFFFff;
+        }
+        .custom{
+            width: 94%;
+            height: 80px;
+            margin: 0 auto;
+            border-bottom: 1px solid #F2F3F7;
+        }
+        .custom-top{
+            width: 100%;
+            height: 40px;
+        }
+        .custom-list{
+            width: 100%;
+            height: 40px;
+            float: left;
+            margin-top: 3px;
+        }
+        .custom-list-left{
+            width: 10%;
+            height: 100%;
+            float: left;
+        }
+        .custom-list-right{
+            width: 22.5%;
+            height: 100%;
+            float: left;
+        }
+        .custom-list-right p{
+            font-size: 14px;
+            font-family: "Microsoft YaHei UI";
+            color: #48484A;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+        }
+        .custom-bottom{
+            width: 94%;
+            min-height: 70px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            border-bottom: 1px solid #F2F3F7;
+        }
+        .custom-input input{
+            float: left;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .custom-content p{
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            color: #5E6173;
+            text-align: center;
+            line-height: 40px;
+        }
+        .right-bottom{
+            width: 96%;
+            min-height: 150px;
+            margin: 0 auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background-color: #FFFFff;
+        }
+        .terms{
+            width: 94%;
+            height: 80px;
+            border-bottom: 1px solid #D8D8D8;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+        .terms-bottom{
+            width: 92%;
+            height: 40px;
+            border-bottom: 1px solid #D8D8D8;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+        .newly-added{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:9999999999999;
+            -moz-opacity: 0.7;
+            opacity:.70;
+            filter: alpha(opacity=78);
+        }
+        .newly-added-title{
+            position: absolute;
+            top: 44px;
+            left: 30%;
+            width: 400px;
+            min-height: 463px;
+            background-color: white;
+        }
+        .custom-variables{
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+        }
+        .custom-variables p{
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 40px;
+            font-weight: bold;
+            float: left;
+            margin-left: 15px;
+        }
+        .variables-content input{
+            width: 370px;
+            height: 40px;
+            border: 1px solid #979797;
+            border-radius: 3px;
+            box-sizing: border-box;
+            float: left;
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+        .variables-bottom input{
+            width: 370px;
+            height: 40px;
+            border: 1px solid #979797;
+            border-radius: 3px;
+            box-sizing: border-box;
+            float: left;
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+        .list input{
+            width: 15px;
+            height: 15px;
+            margin-top: 12px;
+            margin-left: 17px;
+        }
+        .system-variables{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:9999999999999;
+            -moz-opacity: 0.7;
+            opacity:.70;
+            filter: alpha(opacity=78);
+        }
+        .system-variables-top{
+            position: absolute;
+            top: 44px;
+            left: 30%;
+            width: 400px;
+            height: 608px;
+            background-color: white;
+        }
+        .system-title{
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+        }
+        .system-title p{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 40px;
+            font-weight: bold;
+            display: inline-block;
+            width: 350px;
+            height: 100%;
+            text-align: center;
+            padding-left: 25px;
+        }
+        .system-title span{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: inline-block;
+            width: 50px;
+            height: 100%;
+            background: url(../image/close-button.png) no-repeat center center;
+            background-size: 15px 15px;
+            cursor: pointer;
+        }
+        .system-list-left{
+            width: 50%;
+            height: 100%;
+            float: left;
+            background-color: #ffffff;
+            font-family: 'Microsoft YaHei UI';
+            font-size: 16px;color: #5E6173;
+            text-align: center;
+            line-height: 45px;
+            font-weight: bold;cursor: pointer;
+        }
+        .system-list-right{
+            width: 50%;
+            height: 100%;
+            float: left;
+            font-family: 'Microsoft YaHei UI';
+            font-size: 14px;
+            color: #5E6173;
+            text-align: center;
+            line-height: 45px;
+            cursor: pointer;
+        }
+        .view-queries{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:9999999999999;
+            -moz-opacity: 0.7;
+            opacity:.70;
+            filter: alpha(opacity=78);
+        }
+        .queries-move{
+            position: absolute;
+            top: 44px;
+            left: 30%;
+            width: 400px;
+            min-height: 465px;
+            background-color: white;
+        }
+        .move-top{
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+        }
+        .move-top p{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 40px;
+            font-weight: bold;
+            display: inline-block;
+            width: 350px;
+            height: 100%;
+            text-align: center;
+            padding-left: 25px;
+        }
+        .move-top span{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: inline-block;
+            width: 50px;
+            height: 100%;
+            background: url(../image/close-button.png) no-repeat center center;
+            background-size: 15px 15px;
+            cursor: pointer;
+        }
+        .clause{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:9999999999999;
+            -moz-opacity: 0.7;
+            opacity:.70;
+            filter: alpha(opacity=78);
+        }
+        .clause-face{
+            position: absolute;
+            top: 44px;
+            left: 30%;
+            width: 400px;
+            min-height: 465px;
+            background-color: white;
+        }
+        .clause-y::-webkit-scrollbar{
+            display: none;
+        }
+        .option-content::-webkit-scrollbar{
+            display: none;
+        }
+        .tick-scroll::-webkit-scrollbar{
+            display: none;
+        }
+        .trems-option::-webkit-scrollbar{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="left"></div>
+    <div class="right"  id="ha">
+        <div class="right-top">合同变量</div>
+        <div class="right-list">
+            <div class="variables">系统编号</div>
+            <div class="Contract">
+                <h2 style="float:left;line-height: 40px;font-family: 'Microsoft YaHei UI';color: #5E6173;font-size: 14px;
+margin-right: 12px;">合同编号</h2>
+                <h3 style="width: 76px;height: 25px;float: left;display: inline-block;border: 1px solid #1E8DE7;
+font-family: 'Microsoft YaHei UI'; color: #1E8DE7;font-size: 12px;text-align: center;line-height: 25px;
+margin-left: 10px;border-radius: 3px;margin-top: 5px;cursor: pointer">添加</h3>
+            </div>
+            <div class="Contract">
+                <h2 style="float:left;margin-top: 16px; font-family: 'Microsoft YaHei UI';color: #5E6173;font-size: 14px;
+margin-right: 12px;margin-top: 10px;">签约名称</h2>
+                <h3 style="width: 76px;height: 25px;float: left;display: inline-block;border: 1px solid #1E8DE7;
+font-family: 'Microsoft YaHei UI'; color: #1E8DE7;font-size: 12px;text-align: center;line-height: 25px;
+margin-left: 10px;border-radius: 3px;margin-top: 5px;cursor: pointer">添加</h3>
+                <p style="width: 76px;height: 25px;float: left;display: inline-block;border: 1px solid #5E6173;
+font-family: 'Microsoft YaHei UI'; color: #5E6173;font-size: 12px;text-align: center;line-height: 25px;
+margin-left: 10px;border-radius: 3px;margin-top: 5px">变量查询</p>
+            </div>
+            <div class="Contract">
+                <h2 style="float:left;margin-top: 16px; font-family: 'Microsoft YaHei UI';color: #5E6173;font-size: 14px;
+margin-right: 12px;margin-top: 10px;">签约主体</h2>
+                <h3 style="width: 76px;height: 25px;float: left;display: inline-block;border: 1px solid #1E8DE7;
+font-family: 'Microsoft YaHei UI'; color: #1E8DE7;font-size: 12px;text-align: center;line-height: 25px;
+margin-left: 10px;border-radius: 3px;margin-top: 5px;cursor: pointer">添加</h3>
+                <p style="width: 76px;height: 25px;float: left;display: inline-block;border: 1px solid #5E6173;
+font-family: 'Microsoft YaHei UI'; color: #5E6173;font-size: 12px;text-align: center;line-height: 25px;
+margin-left: 10px;border-radius: 3px;margin-top: 5px">变量查询</p>
+            </div>
+        </div>
+        <div class="right-content">
+            <div class="custom">
+                <div class="custom-top" style="position: relative">
+                    <div id="box" class="prompt-box" style="width: 100%;height: 40px;background:#EEF4FF;z-index:999;display: none;position: absolute;">
+                        <div class="prompt-box-content"><p style="font-family: 'Microsoft YaHei UI';
+font-size: 12px;color: #48484A;line-height: 40px;float: left;"></p><span style="float: right;width: 15px;height: 15px;display: inline-block;
+background: url(../image/delete-@2x.png)no-repeat center center;background-size: 15px 15px;margin-top: 12px;
+margin-right: 8px;cursor: pointer;"id="closebox"></span></div>
+                    </div><!--命令提示框-->
+                    <h2 style="font-size: 14px;font-weight: bold;font-family: 'Microsoft YaHei UI';width: 70px;height: 25px;
+color: #5E6173;float:left;margin-top: 10px; ">自定义变量</h2>
+                    <h3 id="getdelete" style="display: block;width: 55px;height: 25px;text-align: center;line-height: 25px;margin-top: 10px;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #1E8DE7;float: right;padding-left: 15px;background-size: 14px 14px;
+background: url(../image/delete-blue.png) no-repeat 10px center;cursor: pointer;">删除</h3>
+                    <h4 id="nowly" style="display:inline-block;width: 55px;height: 25px;text-align: center;line-height: 25px;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #1E8DE7;float: right;margin-top: 10px;
+padding-left: 15px;background: url(../image/newly-added-icon.png) no-repeat 10px center;
+background-size: 14px 14px;cursor: pointer;">新增</h4>
+                </div>
+                <div class="custom-list">
+                    <div class="custom-list-left"></div>
+                    <div class="custom-list-right">
+                        <p>名称</p>
+                    </div>
+                    <div class="custom-list-right">
+                        <p>类型</p>
+                    </div>
+                    <div class="custom-list-right">
+                        <p>长度</p>
+                    </div>
+                    <div class="custom-list-right">
+                        <p>是否必填</p>
+                    </div>
+                </div>
+            </div>
+            <div class="big-custom">
+            <div class="custom-bottom">
+                <div class="custom-bottom-top" style="width: 100%;height: 40px;margin-top: 5px;">
+                    <div class="custom-input" style="width: 10%;height: 100%;float: left;margin-top: 5px;">
+                        <input type="checkbox" class="input-u">
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>畜禽号</p>
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>文本</p>
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>32</p>
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>是</p>
+                    </div>
+                </div>
+                <div class="custom-bottom-list" style="width: 100%;height: 40px;">
+                    <h4 id="toseemove" style="float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;
+border: 1px solid #5E6173;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #5E6173;border-radius: 3px;
+text-align: center;line-height: 25px;margin-top: 0px;margin-right: 8px;cursor: pointer">查看</h4>
+                    <h5 style="float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;
+border: 1px solid #5E6173;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #5E6173;border-radius: 3px;
+text-align: center;line-height: 25px;margin-top: 0px;margin-right: 10px">变量查询</h5>
+                    <h6 style="float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;
+border: 1px solid #1E8DE7;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #1E8DE7;border-radius: 3px;
+text-align: center;line-height: 25px;margin-top: 0px;margin-right: 10px;cursor: pointer;">添加</h6>
+                </div>
+            </div>
+            <div class="custom-bottom">
+                <div class="custom-bottom-top" style="width: 100%;height: 40px;margin-top: 5px;">
+                    <div class="custom-input" style="width: 10%;height: 100%;float: left;margin-top: 5px;">
+                        <input type="checkbox" value="" class="input-u" />
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>畜禽号</p>
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>文本</p>
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>32</p>
+                    </div>
+                    <div class="custom-content" style="width: 22.5%;height: 100%;float: left;">
+                        <p>是</p>
+                    </div>
+                </div>
+                <div class="custom-bottom-list" style="width: 100%;height: 40px;">
+                    <h4 id="goseemove" style="float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;
+border: 1px solid #5E6173;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #5E6173;border-radius: 3px;
+text-align: center;line-height: 25px;margin-top: 0px;margin-right: 8px;cursor: pointer">查看</h4>
+                    <h5 style="float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;
+border: 1px solid #5E6173;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #5E6173;border-radius: 3px;
+text-align: center;line-height: 25px;margin-top: 0px;margin-right: 10px">变量查询</h5>
+                    <h6 style="float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;
+border: 1px solid #1E8DE7;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #1E8DE7;border-radius: 3px;
+text-align: center;line-height: 25px;margin-top: 0px;margin-right: 10px;cursor: pointer;">添加</h6>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="right-bottom">
+            <div class="terms"style="position: relative;">
+                <div id="boxes" class="prompt-boxes" style="width: 100%;height: 40px;background:#EEF4FF;z-index:999;display: none;position: absolute;">
+                    <div class="prompt-boxes-content"><p style="font-family: 'Microsoft YaHei UI';
+font-size: 12px;color: #48484A;line-height: 40px;float: left;"></p><span style="float: right;width: 15px;height: 15px;display: inline-block;
+background: url(../image/delete-@2x.png)no-repeat center center;background-size: 15px 15px;margin-top: 12px;
+margin-right: 8px;cursor: pointer;"id="closeboxes"></span></div>
+                </div><!--条款命令提示框-->
+                <div class="terms-title" style="width: 100%;height: 40px;">
+                    <p style="float: left;font-family: 'Microsoft YaHei UI';font-weight: bold;
+font-size: 14px;color: #48484A;margin-left: 15px;line-height: 40px;">自定义条款</p>
+                    <span id="choses" style="float: right;font-size: 14px;font-family: 'Microsoft YaHei UI';
+color: #1E8DE7;display: inline-block;width: 55px;height: 25px;line-height: 25px;padding-top: 2px;
+text-align: right;padding-right:10px;margin-top: 7px;background: url(../image/delete-blue.png) no-repeat 8px center;
+background-size: 15px 15px;cursor: pointer;">删除</span>
+                    <h6 id="openclause" style="float: right;font-size: 14px;font-family: 'Microsoft YaHei UI';
+color: #1E8DE7;display: inline-block;width: 55px;height: 25px;line-height: 25px;padding-top: 2px;
+text-align: right;padding-right:10px;margin-top: 7px;background: url(../image/newly-added-icon.png) no-repeat 8px center;
+background-size: 15px 15px;cursor: pointer;">新增</h6>
+                </div>
+                <div class="terms-top" style="width: 100%;height: 40px;">
+                    <div class="terms-top-left" style="width: 10%;height: 100%;float: left;"></div>
+                    <div class="terms-top-content" style="width: 30%;height: 100%;float: left;font-size: 14px;
+font-family: 'Microsoft YaHei UI';color: #48484A;line-height: 40px;text-align: center;">条款名称</div>
+                    <div class="terms-top-right" style="width: 22.5%;height: 100%;float: right;font-size: 14px;
+font-family: 'Microsoft YaHei UI';color: #48484A;line-height: 40px;text-align: center;">详情</div>
+                </div>
+            </div>
+            <div class="big-terms-bottom">
+            <div class="terms-bottom">
+                <div class="terms-bottom-left" style="width: 10%;height: 100%;float: left;">
+                    <input type="checkbox" value="input-v" class="input-v" style="width: 15px;height: 15px;float: left;
+                    margin-left: 15px;margin-top: 12px;">
+                </div>
+                <div class="terms-bottom-content" style="width: 30%;height: 100%;float: left;text-align: center;
+font-family: 'Microsoft YaHei UI';font-size: 14px;color: #5E6173;line-height: 40px">条款一</div>
+                <div class="terms-bottom-right" style="width: 55%;height: 100%;float: right;">
+                    <div class="see" style="width: 55px;height: 25px;border: 1px solid #1E8DE7;box-sizing: border-box;
+float: left;text-align: center;font-family: 'Microsoft YaHei UI';font-size: 12px;color: #1E8DE7;
+line-height: 25px;border-radius: 3px;margin-left: 5px;margin-top: 7px;cursor: pointer;">添加</div>
+                    <div class="see" style="width: 55px;height: 25px;border: 1px solid #d4d0c8;box-sizing: border-box;
+float: left;text-align: center;font-family: 'Microsoft YaHei UI';font-size: 12px;color: #48484A;
+line-height: 25px;border-radius: 3px;margin-left: 5px;margin-top: 7px;cursor: pointer;">变量查询</div>
+                    <div id="totrems" class="see" style="width: 55px;height: 25px;border: 1px solid #d4d0c8;box-sizing: border-box;
+float: left;text-align: center;font-family: 'Microsoft YaHei UI';font-size: 12px;color: #48484A;
+line-height: 25px;border-radius: 3px;margin-left: 5px;margin-top: 7px;cursor: pointer;">查看</div>
+                </div>
+            </div>
+            </div>
+            </div>
+    </div>
+</div>
+
+<div id="fade" class="newly-added">
+    <div class="newly-added-title">
+        <div class="custom-variables">
+            <p>自定义变量</p>
+<!--            <div id="close" class="custom-variables-close" style="width: 14px; height: 14px;float: right;-->
+<!--background: url(../image/close-button.png) no-repeat center center;margin-right: 15px;margin-top: 12px;-->
+<!--background-size: 100% 100%;cursor: pointer;"></div>-->
+        </div>
+        <div class="variables-content" style="width: 100%;height: 170px;">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">变量名称</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <input type="text" class="variable">
+            <span style="float: left;display: block;font-size: 12px;width: 100%;margin-left: 15px;
+margin-top: 5px;color: #E51C23;">提示：变量名称不能为空</span>
+            <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;margin-top: 10px;
+margin-left: 15px;">类型</p>
+            <select style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;" id="select">
+                <option value="text" >文本</option>
+                <option value="getoption"  >下拉选项</option>
+            </select>
+        </div>
+        <div id="text" class="variables-bottom" style="width: 100%;height: 300px;">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 12px;">字段类型</p><span style="float: left;margin-top: 8px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <select style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 6px;">
+                <option>文字</option>
+                <option>数字</option>
+                <option>日期</option>
+            </select>
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">字段最大长度</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <input type="text" class="sizelength">
+            <span style="float: left;display: block;font-size: 12px;width: 100%;margin-left: 15px;
+margin-top: 5px;color: #E51C23;">提示：变量名称不能为空</span>
+            <!--<p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">默认值</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <input type="text" value="10元保证金">-->
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">是否必填</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <div class="list" style=" float:left;width: 100%;height: 40px;">
+                <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="是">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px;margin-right: 110px;">是</p>
+                <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="否">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px">否</p>
+            </div>
+            <div class="confirm" style="width: 100%; height: 40px;float: left;padding-bottom: 30px;border-top: 1px solid #d4d0c8;margin-top: 20px">
+                <p style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 120px;margin-top: 24px;border-radius: 3px;" onclick="variablend()">确定</p>
+                <span id="cancel" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #F2F3F7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #5E6173;text-align: center;line-height: 25px;
+margin-left: 17px;margin-top: 24px;border-radius: 3px; cursor: pointer">取消</span>
+            </div>
+        </div>
+        <div id="getoption" class="newly-top" style="display: none;">
+            <div class="new-options" style="width: 370px;height: 40px;float: left;font-family: 'Microsoft YaHei UI';
+box-sizing: border-box;border: 1px solid #1E8DE7;font-size: 14px;color: #1E8DE7;margin-left: 15px;margin-top: 15px;
+text-align: center;line-height: 40px;border-radius: 3px;cursor: pointer;background: url(../image/newly-added-icon.png) no-repeat 140px center;
+background-size: 13px 13px;padding-left: 10px;margin-bottom: 20px" onclick="newxx()">新增选项</div>
+            <div class="option-content" style="width: 100%;height: 200px;overflow-y: scroll;">
+                <div class="option-list1" style="width: 100%;height: 160px;">
+                    <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 20px;margin-top: 5px;">选项</p><span style="float: left;margin-top: 3px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                    <div class="cutex" style="width: 20px;height: 20px;float:right;margin-top:5px;margin-right:20px;
+background: url(../image/delete-@2x.png) no-repeat center center;background-size: 15px 15px;
+cursor: pointer" onclick='delexl(1)'></div>
+                    <textarea class="option-text" style="width: 370px;height: 100px;float: left;margin-left: 20px;border-radius: 3px;
+margin-top: 5px;border: 1px solid #979797;box-sizing: border-box;font-size: 14px;font-family: 'Microsoft YaHei UI';
+color: #48484A;" id="trean"></textarea>
+                </div>
+            </div>
+            <div class="new-confirm" style="width: 100%;height: 50px;border-top: 1px solid #D8D8D8;
+float: left;margin-top: 0px;">
+                <p style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 120px;margin-top: 15px; border-radius: 3px;cursor: pointer;" onclick="variablend()">确定</p>
+                <span id="canceler" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #F2F3F7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #5E6173;text-align: center;line-height: 25px;
+margin-left: 17px;margin-top: 15px;border-radius: 3px; cursor: pointer;">取消</span>
+            </div>
+        </div><!--自定义变量选项内容-->
+    </div>
+</div>  <!--自定义变量弹出框-->
+
+<div id="toclause" class="clause">
+   <div class="clause-face">
+       <div class="custom-variables">
+           <p>自定义条款</p>
+           <div class="custom-variables-close" style="width: 14px; height: 14px;float: right;
+background: url(../image/close-button.png) no-repeat center center;margin-right: 15px;margin-top: 12px;
+background-size: 100% 100%;cursor: pointer;"></div>
+           <span style="float: right;line-height: 40px;font-size: 14px;color: #FFFFff;cursor: pointer;
+font-family: 'Microsoft YaHei UI';margin-right: 20px;" id="cause">插入变量</span>
+       </div>
+       <div class="variables-content" style="width: 100%;height: 120px;">
+           <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">变量名称</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+           <input type="text" class="variablesname">
+           <span style="float: left;display: block;font-size: 12px;width: 100%;margin-left: 15px;
+margin-top: 5px;color: #E51C23;">提示：变量名称不能为空</span>
+           <!--<p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;margin-top: 15px;-->
+<!--margin-left: 15px">类型</p>-->
+           <!--<input type="text" style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;-->
+<!--border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;">-->
+       </div>
+       <div class="newly-clause">
+           <div class="new-options" style="width: 370px;height: 40px;float: left;font-family: 'Microsoft YaHei UI';
+box-sizing: border-box;border: 1px solid #1E8DE7;font-size: 14px;color: #1E8DE7;margin-left: 15px;margin-top: 0px;
+text-align: center;line-height: 40px;border-radius: 3px;cursor: pointer;background: url(../image/newly-added-icon.png) no-repeat 140px center;
+background-size: 13px 13px;padding-left: 20px" onclick="newtk()">新增条款</div>
+           <div class="clause-y" style="width: 100%;height: 200px;overflow-y: scroll;">
+               <div class="terms-copy" style="width: 100%;min-height: 250px;">
+                   <div class="terms-conditions1" style="width: 100%;height: 160px;">
+                       <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">条款</p><span style="float: left;margin-top: 15px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                       <div class="cut" style="width: 20px;height: 20px;float:right;margin-top:15px;margin-right:20px;
+background: url(../image/delete-@2x.png) no-repeat center center;background-size: 15px 15px;
+cursor: pointer" onclick='deltk(1)'></div>
+                       <textarea class="aaa" style="width: 370px;height: 100px;float: left;margin-left: 15px;border-radius: 3px;
+margin-top: 5px;border: 1px solid #979797;box-sizing: border-box;font-size: 14px;font-family: 'Microsoft YaHei UI';
+color: #48484A;" id="tarea1" onclick="settext(1)"></textarea>
+               </div>
+           </div>
+       </div>
+       </div>
+       <div class="new-confirm" style="width: 100%;height: 50px;border-top: 1px solid #D8D8D8;
+float: left;margin-top: 0px;">
+               <p style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 120px;margin-top: 15px; border-radius: 3px;cursor: pointer;" onclick="btnend()">确定</p>
+               <span id="canceling" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #F2F3F7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #5E6173;text-align: center;line-height: 25px;
+margin-left: 17px;margin-top: 15px;border-radius: 3px; cursor: pointer;">取消</span>
+       </div>
+   </div>
+</div>  <!--条款新增弹出框-->
+
+<div id="gosystem" class="system-variables">
+    <div class="system-variables-top">
+        <div class="system-title"><p>变量选项</p><span id="closes"></span></div>
+        <div class="system-list" style="width: 100%;height: 45px;background-color: #D8D8D8;">
+            <div id="list-left">系统变量</div>
+            <div id="list-right">其他变量</div>
+        </div><!--变量选项-系统变量导航-->
+        <div class="system-content" style="width: 100%;height: 469px;overflow-y: scroll;">
+            <div class="system-content-list" style="width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;">
+                <input type="checkbox"  style="float: left;width:15px;height: 15px;
+border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;" name="checkeds"; onclick="choose(this)"; value="合同名称">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+line-height: 44px;margin-left: 15px">合同名称</p>
+            </div>
+            <div class="system-content-list" style="width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;">
+                <input type="checkbox" style="float: left;width:15px;height: 15px;
+border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;"name="checkeds"; onclick="choose(this)"; value="签约主体">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+line-height: 44px;margin-left: 15px">签约主体</p>
+            </div>
+            <div class="system-content-list" style="width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;">
+                <input type="checkbox" style="float: left;width:15px;height: 15px;
+border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;"name="checkeds"; onclick="choose(this)"; value="合同金额">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+line-height: 44px;margin-left: 15px">合同金额</p>
+            </div>
+            <div class="system-content-list" style="width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;">
+                <input type="checkbox" style="float: left;width:15px;height: 15px;
+border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;"name="checkeds"; onclick="choose(this)"; value="组织单元">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+line-height: 44px;margin-left: 15px">组织单元</p>
+            </div>
+        </div><!--变量选项-系统变量内容-->
+        <div class="system-content-2" style="width: 100%;height: 469px;display: none;">
+            <div class="variables-content" style="width: 100%;height: 170px;">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">变量名称</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <input type="text" class="systemname">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;margin-top: 15px;
+margin-left: 15px">类型</p>
+                <select style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;">
+                    <option value="text">文本</option>
+                    <option value="getoption" >下拉选项</option>
+                </select>
+            </div>
+            <div id="" class="variables-bottom" style="width: 100%;height: 300px; border-bottom: 1px solid #D8D8D8;box-sizing: border-box;">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 0px;">字段类型</p><span style="float: left;margin-top: 0px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <select style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;">
+                    <option>文字</option>
+                    <option>数字</option>
+                    <option>日期</option>
+                </select>
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">字段最大长度</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <input type="text">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">默认值</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <input type="text" value="10元保证金">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">是否必填</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;"></span>
+                <div class="list" style=" float:left;width: 100%;height: 40px;">
+                    <input type="checkbox" checked="checked">
+                    <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px;margin-right: 110px;">是</p>
+                    <input type="checkbox">
+                    <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px">否</p>
+                </div>
+            </div>
+        </div><!--变量选项-其他变量内容-->
+        <div class="system-bottom" style="width: 100%;height: 54px;border-top: 1px solid #D8D8D8;">
+            <p style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 120px;margin-top: 15px; border-radius: 3px;cursor: pointer;" onclick="btn()">确定</p>
+            <span id="gocloses" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #F2F3F7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #5E6173;text-align: center;line-height: 25px;
+margin-left: 17px;margin-top: 15px;border-radius: 3px; cursor: pointer;">取消</span>
+        </div><!--变量选项-系统变量底部-->
+    </div>
+</div>
+
+<div id="seemove" class="view-queries">
+    <div class="queries-move">
+        <div class="move-top"><p>查看</p><span id="tocloses"></span></div>
+        <div class="move-content" style="width: 100%;height: 368px;">
+            <div class="see-type" style="height: 170px;width: 100%;">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 11px;">变量名称</p><span style="float: left;margin-top: 12px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <input type="text" disabled="disabled" style="width: 370px;height: 40px;float: left;margin-left: 15px;
+border: 1px solid #979797;box-sizing: border-box;border-radius: 3px;">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">类型</p>
+                <select disabled="disabled" style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;">
+                    <option value="text">文本</option>
+                </select>
+            </div>
+            <!--<div class="see-content" style="width: 100%;height: 198px;">
+                <p style="font-size: 14px;font-family: 'Microsoft YaHei UI';color: #48484A;
+margin-left: 15px;">选项</p>
+                <textarea style="width: 370px;height: 90px;margin-left: 15px;margin-top: 10px;"></textarea>
+            </div>-->
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 12px;">字段类型</p><span style="float: left;margin-top: 8px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <select disabled="disabled" style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 6px;">
+                <option>文字</option>
+                <option>数字</option>
+                <option>日期</option>
+            </select>
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">字段最大长度</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <input type="text" class="sizelength" style="width: 370px;height: 30px;float: left;margin-left: 15px;
+border: 1px solid #d4d0c8;box-sizing: border-box;border-radius: 3px;margin-top: 5px;">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">是否必填</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <div class="list" style=" float:left;width: 100%;height: 40px;">
+                <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="是" style="float: left;">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px;margin-right: 110px;">是</p>
+                <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="否" style="float: left;">
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px">否</p>
+            </div>
+        </div>
+        <div class="see-bottom" style="width: 100%;height: 40px;box-sizing: border-box;
+border-top: 1px solid #D8D8D8;margin-top: 20px">
+            <p id="tolist" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 162px;margin-top: 8px;border-radius: 3px; cursor: pointer;">关闭</p>
+        </div>
+    </div>
+</div>  <!--文本查看弹出框-->
+
+<div id="gotack" class="option-tick" style="display: none;position: absolute;top: 0%;left: 0%;width: 100%;
+height: 100%; background-color: black; z-index:9999999999999; -moz-opacity: 0.7;opacity:.70; filter: alpha(opacity=78);">
+    <div class="tick-list" style=" position: absolute;top: 44px;left: 30%;width: 400px;
+min-height: 463px;background-color: white;">
+        <div class="tick-list-top" style="position: relative;width: 100%;height: 40px;background: linear-gradient(to right,#5DC1F7,#1E8DE7);">
+            <p style="position: absolute;left: 0;bottom: 0;font-family: 'Microsoft YaHei UI';
+font-size: 14px;color: #ffffff;line-height: 40px;font-weight: bold; display: inline-block;
+width: 350px;height: 100%;text-align: center;padding-left: 25px;">查看</p>
+            <span id="closetack" style="position: absolute;right: 0;bottom: 0;display: inline-block;width: 50px;
+height: 100%; background: url(../image/close-button.png) no-repeat center center;background-size: 15px 15px;
+cursor: pointer;"></span>
+        </div>
+        <div class="tick-list-content" style="width: 100%;height: 358px;">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 11px;">变量名称</p><span style="float: left;margin-top: 12px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <input type="text" disabled="disabled" style="width: 370px;height: 40px;float: left;margin-left: 15px;
+border: 1px solid #979797;box-sizing: border-box;border-radius: 3px;">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">类型</p>
+            <select disabled="disabled" style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;">
+                <option value="getoption" >下拉选项</option>
+            </select>
+            <div class="tick-scroll" style="width: 100%;height: 180px;float:left;margin-top:20px;overflow-y: scroll;">
+                <div class="tick-box" style="width: 100%;height: 140px;">
+                    <p style="display: inline-block;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+width: 100%;margin-left: 15px;">选项</p>
+                    <textarea style="width: 370px;height: 100px;float: left;margin-left: 15px;margin-top: 5px;"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="tick-list-bottom" style="width: 100%;height: 40px;box-sizing: border-box;
+border-top: 1px solid #D8D8D8;">
+            <p id="toticklist" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 162px;margin-top: 15px;border-radius: 3px; cursor: pointer;">关闭</p>
+        </div>
+    </div>
+</div><!--下拉选项查看弹出框-->
+
+<div id="treaml" class="trems-tick" style="display: none;position: absolute;top: 0%;left: 0%;width: 100%;
+height: 100%; background-color: black; z-index:9999999999999; -moz-opacity: 0.7;opacity:.70; filter: alpha(opacity=78);">
+    <div class="trems-content" style=" position: absolute;top: 44px;left: 30%;width: 400px;
+min-height: 463px;background-color: white;">
+        <div class="trems-content-top" style="position: relative;width: 100%;height: 40px;background: linear-gradient(to right,#5DC1F7,#1E8DE7);">
+            <p style="position: absolute;left: 0;bottom: 0;font-family: 'Microsoft YaHei UI';
+font-size: 14px;color: #ffffff;line-height: 40px;font-weight: bold; display: inline-block;
+width: 350px;height: 100%;text-align: center;padding-left: 25px;">查看</p>
+            <span id="closetrems" style="position: absolute;right: 0;bottom: 0;display: inline-block;width: 50px;
+height: 100%; background: url(../image/close-button.png) no-repeat center center;background-size: 15px 15px;
+cursor: pointer;"></span>
+        </div>
+        <div class="trems-content-list" style="width: 100%;height: 358px;">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 11px;">条款名称</p><span style="float: left;margin-top: 12px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+            <input type="text" disabled="disabled" style="width: 370px;height: 40px;float: left;margin-left: 15px;
+border: 1px solid #979797;box-sizing: border-box;border-radius: 3px;">
+            <div class="trems-option" style="width: 100%;height: 260px;float:left;margin-top:20px;overflow-y: scroll;">
+                <div class="trems-tick" style="width: 100%;height: 130px;">
+                    <p style="display: inline-block;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+width: 100%;margin-left: 15px;">条款</p>
+                    <textarea style="width: 370px;height: 90px;float: left;margin-left: 15px;margin-top: 5px;"></textarea>
+                </div>
+                <div class="trems-tick" style="width: 100%;height: 130px;">
+                    <p style="display: inline-block;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+width: 100%;margin-left: 15px;">条款</p>
+                    <textarea style="width: 370px;height: 90px;float: left;margin-left: 15px;margin-top: 5px;"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="trems-content-bottom" style="width: 100%;height: 45px;border-top: 1px solid #d4d0c8;">
+            <p id="totremslist" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 162px;margin-top: 20px;border-radius: 3px; cursor: pointer;">关闭</p>
+        </div>
+    </div>
+</div><!--条款查看弹出框-->
+
+
+
+<!--引入jquery库-->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/json2.js"></script>
+<script src="../js/selectivizr.js"></script>
+<script type="text/javascript">
+    // $(document).ready(function(){
+    //     var hi = $(window).height();
+    //     $("#ha").css("height",hi);
+    // });
+   window.onload =function () {
+       var hi = $(window).height();
+       $("#ha").css("height", hi);
+
+       $('#nowly').click(function () {  // 自定义变量1的弹出框
+           $('#fade').css('display', 'block')
+       });
+
+       $('#close').click(function () {   // 自定义变量1的弹出框关闭按钮
+           $('#fade').css('display', 'none')
+       });
+
+       $('#cancel').click(function () {  // 自定义变量1的弹出框 取消按钮
+           $('#fade').css('display', 'none')
+       });
+
+        // $(document).ready(function () {   // 自定义变量 （显示，隐藏选项内容）
+       $("#select").change(function () {
+                var type = $(this).val();
+                if (type == 'text') {
+                    $('#text').css('display', 'block');
+                    $('#getoption').css('display', 'none');
+                    // $('#clause').css('display', 'none');
+                    $('.variables').remove();
+                    // $('.getclose').remove();
+                } else if (type == 'getoption') {
+                    $('#getoption').css('display', 'block');
+                    $('#text').css('display', 'none');
+                    // $('#clause').css('display', 'none');
+                    $('.variables').remove();
+                    // $('.getclose').remove();
+                }
+            });
+
+       // $('.custom-variables').html("<p>自定义变量</p><div id='forclose' class='getclose'style='width: 14px; height: 14px;float: right;" +
+                //     "background: url(../image/close-button.png) no-repeat center center;margin-right: 15px;margin-top: 12px;\n" +
+                //     "background-size: 100% 100%;cursor: pointer; '></div> <span id='forvariables' class='variables' style='float: right;width: 76px;" +
+                //     "height: 23px;border: 1px solid #ffffff;font-size: 12px;border-radius: 3px;" +
+                //     "text-align: center;color: #ffffff;line-height: 23px;margin-right: 10px;margin-top: 7px;cursor: pointer; '>插入变量</span>")
+
+       $('#forclose').click(function () {  // 自定义变量1的弹出框 取消按钮
+                    $('#fade').css('display', 'none')
+                });
+
+       $('#forvariables').click(function () {  // 自定义变量1的弹出框 取消按钮
+                    $('#fade').css('display', 'none');
+                    $('#gosystem').css('display', 'block')
+                });
+
+       $("#cause").click(function () {
+                   $("#gosystem").css("display","block");
+                   $("#toclause").css("display","none")
+                });
+
+
+       $('#canceler').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#fade').css('display', 'none')
+        });
+
+       $('#canceling').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#fade').css('display', 'none')
+        });
+
+       $('#closes').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#gosystem').css('display', 'none')
+        });
+
+       $('#gocloses').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#gosystem').css('display', 'none')
+            $("#toclause").css("display","block")
+        });
+
+       //系统变量和自定义变量选项卡
+       $(document).ready(function () {
+            $('#list-left').addClass("system-list-left");
+            $('#list-right').addClass("system-list-right");
+            $('#list-right').click(function () {
+                $('#list-right').removeClass("system-list-right");
+                $('#list-right').addClass("system-list-left");
+                $('#list-left').addClass("system-list-right");
+                $('#list-left').removeClass("system-list-left");
+                $('.system-content').css('display', 'none');
+                $('.system-content-2').css('display', 'block');
+            });
+            $('#list-left').click(function () {
+                $('#list-left').removeClass("system-list-right");
+                $('#list-left').addClass("system-list-left");
+                $('#list-right').addClass("system-list-right");
+                $('#list-right').removeClass("system-list-left");
+                $('.system-content').css('display', 'block');
+                $('.system-content-2').css('display', 'none');
+            })  // 变量选项内容
+        });
+
+
+       $('#toseemove').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#seemove').css('display', 'block')
+        });
+
+       $('#tocloses').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#seemove').css('display', 'none')
+        });
+
+       $('#tolist').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#seemove').css('display', 'none')
+        });
+
+       $('#openclause').click(function () {  // 自定义变量1的弹出框 取消按钮
+            $('#toclause').css('display', 'block')
+        });
+
+       //自定义删除指定变量并提示
+       $('#getdelete').click(function () {
+           var inputs = document.getElementsByClassName("input-u");
+           for (var i = 0; i < inputs.length; i++) {
+               if (inputs[i].checked) {
+                   // //alert(inputs.length)
+                   $(".custom-bottom")[i].remove();
+               }
+           }
+           // if ($(".input-u").is(":checked")) {
+           //     $('#box').css('display', 'block')//提示：该变量已经被引用，请在文本中将变量删除后，再重试
+           //     $('#box p').html("提示：该变量已经被引用，请在文本中将变量删除后，再重试");
+           // } else {
+           //     $('#box').css('display', 'block')//没有选中要删除的对象
+           //     $('#box p').html("提示：没有选中要删除的对象")
+           // }
+       });
+
+       //自定义条款删除提示
+       $('#choses').click(function () {
+           if ($(".input-v").is(":checked")) {
+               $('#boxes').css('display', 'block')//提示：该变量已经被引用，请在文本中将变量删除后，再重试
+               $('#boxes p').html("提示：该变量已经被引用，请在文本中将变量删除后，再重试");
+           } else {
+               $('#boxes').css('display', 'block')//没有选中要删除的对象
+               $('#boxes p').html("提示：没有选中要删除的对象")
+           }
+       });
+
+       // 自定义条款框隐藏
+       //点击插入自定义变量
+       $('.custom-variables-close').click(function () {
+           $('#toclause').css('display', 'none')
+       });
+       //自定义条款框点击取消
+       $('#canceling').click(function () {
+           $('#toclause').css('display', 'none')
+       });
+
+       //命令提示框
+       $('#closebox').click(function () {
+           $('#box').css('display', 'none')
+       });
+       //关闭自定义条款命令提示框
+       $('#closeboxes').click(function () {
+           $('#boxes').css('display', 'none')
+       });
+
+       $('#goseemove').click(function () {
+           $('#gotack').css('display', 'block')
+       });
+
+       $('#closetack').click(function () {
+           $('#gotack').css('display', 'none')
+       });
+
+       $('#toticklist').click(function () {
+           $('#gotack').css('display', 'none')
+       });
+
+       $('#totrems').click(function () {
+           $('#treaml').css('display','block')
+       });
+
+       $('#closetrems').click(function () {
+           $('#treaml').css('display','none')
+       });
+
+       $('#totremslist').click(function () {
+           $('#treaml').css('display','none')
+       })
+
+    }
+
+
+
+
+    //新增下拉选项
+    var count =0;
+    function newxx() {
+        count++;
+        $(".option-content").append("<div class='option-list" + count + "'; style=\"width: 100%;height: 160px;\">\n" +
+            "<p style=\"font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float:left;\n" +
+            "margin-left:15px;margin-top: 0px;\">选项" + count + "</p><span style=\"float: left;margin-top: 0px;margin-left: 2px;\n" +
+            "font-family:'Microsoft YaHei UI';font-size: 16px;color:#E51C23;\">*</span>" +
+            "<div id='delex" + count + "'; vlaue='" + count + "'; class=\"cutex\" style=\"width: 20px;height: 20px;float:right;margin-top:0px;margin-right:20px;background: url(../image/delete-@2x.png) no-repeat center center;background-size: 15px 15px;cursor: pointer;\" onclick='delexl("+count+")'></div>\n" +
+            "<textarea class=\"option-text\" style=\"width:370px;height: 100px;float: left;margin-left: 15px;border-radius: 3px;\n" +
+            "margin-top: 5px;border:1px solid #979797;box-sizing: border-box;font-size: 14px;font-family: 'Microsoft YaHei UI';\n" +
+            "color: #48484A;\" id=\"trean\"></textarea></div>");
+        // 按钮删除选中条框
+        delexl = function (arr) {
+            // //alert(arr);
+            $(".option-list" + arr + "").remove();
+        }
+    }
+
+
+        //插入变量选择唯一性
+    function choose(obj){
+            var checkeds = document.getElementsByName("checkeds");
+            for (var i = 0; i <checkeds.length ; i++) {
+                if (checkeds[i]!=obj &&checkeds[i].checked)
+                {
+                    checkeds[i].checked=!obj.checked ;
+                }
+            }
+        }
+
+
+
+    /**
+     * 获取当前光标位置
+     * @param ctrl
+     * @returns {number}
+     */
+    function getCursortPosition(element) {
+        var CaretPos = 0;
+        var EndPos = 0;
+        if (document.selection) {
+            element.focus();
+            var Sel = document.selection.createRange();
+            Sel.moveStart('character', -element.value.length);
+            CaretPos = Sel.text.length;
+        }
+        else if (element.selectionStart || element.selectionStart == '0')//支持firefox
+            //得到光标结束的位置
+            EndPos = element.selectionEnd;
+            //获取光标开始位置
+            CaretPos = element.selectionStart;
+        return (CaretPos);
+    }
+
+    //新增条款
+    var count =1;
+    function newtk() {
+        count ++;
+        $(".terms-copy").append("<div class='terms-conditions"+count+"'; style=\"width: 100%;height: 160px;\">\n" +
+            "<p style=\"font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float:left;\n" +
+            "margin-left:15px;margin-top: 0px;\">条款"+count+"</p><span style=\"float: left;margin-top: 0px;margin-left: 2px;\n" +
+            "font-family:'Microsoft YaHei UI';font-size: 16px;color:#E51C23;\">*</span>" +
+            "<div id='del"+count+"'; vlaue='"+count+"'; class=\"cut\" style=\"width: 20px;height: 20px;float:right;margin-top:0px;margin-right:20px;background: url(../image/delete-@2x.png) no-repeat center center;background-size: 15px 15px;cursor: pointer;\" onclick='deltk("+count+")'></div>\n" +
+            "<textarea id='tarea"+count+"'; style=\"width:370px;height: 100px;float: left;margin-left: 15px;border-radius: 3px;\n" +
+            "margin-top: 5px;border:1px solid #979797;box-sizing: border-box;font-size: 14px;font-family: 'Microsoft YaHei UI';\n" +
+            "color: #48484A;\" onclick='settext("+count+")'></textarea></div>");
+        //按钮删除选中条框
+        deltk =function(obj) {
+            // //alert(obj)
+            $(".terms-conditions"+obj+"").remove();
+        }
+    }
+
+    var indextextarea = 0;
+    settext = function (obj) {
+        indextextarea = obj;
+    }
+
+    //条框插入变量确定按钮
+    function btn() {
+        var count =0;
+        var checkedslist = document.getElementsByName('checkeds');
+        var val;
+        var textareas;
+        var num;
+        var vab = $(".systemname").val();
+        for (var i = 0; i < checkedslist.length; i++) {
+            count++;
+            if (checkedslist[i].checked == true) {
+                val = checkedslist[i].value;
+                $("#gocloses").click();
+                var textareas = document.getElementById("tarea"+indextextarea+"").value;
+                textareas += vab;
+                //获取目标输入框
+                var obj = document.getElementById("tarea"+indextextarea+"");
+                num = getCursortPosition(obj);
+                //光标开始位置
+                    if(num==textareas.length){
+                        document.getElementById("tarea"+indextextarea+"").value = textareas +=val;
+                    }else//光标结束位置
+                    if(num==0){
+                        document.getElementById("tarea"+indextextarea+"").value = val +=textareas;
+                    }else {
+                        //光标位置
+                        document.getElementById("tarea"+indextextarea+"").value=textareas.substring(0, num) + val + textareas.substring(num, textareas.length);
+                    }
+                    break;
+                }else if(count==checkedslist.length){
+                $("#gocloses").click();
+                var textareas = document.getElementById("tarea"+indextextarea+"").value;
+
+                var obj = document.getElementById("tarea"+indextextarea+"");
+                num = getCursortPosition(obj);
+                if(num==textareas.length){
+                    document.getElementById("tarea"+indextextarea+"").value = textareas +=vab;
+                }else//光标结束位置
+                if(num==0){
+                    document.getElementById("tarea"+indextextarea+"").value = vab +=textareas;
+                }else {
+                    //光标位置
+                    document.getElementById("tarea"+indextextarea+"").value=textareas.substring(0, num) + vab + textareas.substring(num, textareas.length);
+                }
+                break;
+            }
+        }
+                return true;
+    }
+
+
+    //变量是否必填唯一选择
+    function choosevariable(obj) {
+        var choosevariables = document.getElementsByName("choosevariables");
+        for (var i = 0; i <choosevariables.length ; i++) {
+            if (choosevariables[i]!=obj &&choosevariables[i].checked)
+            {
+                choosevariables[i].checked=!obj.checked ;
+            }
+        }
+    }
+
+    //变量确定按钮
+
+    function variablend() {
+        var val;
+        var sizelength ;
+        //变量名
+        var vab = $(".variable").val();
+
+        //变量类型
+        var changeoption = document.getElementById("select");
+        var index = changeoption.selectedIndex;
+        var value = changeoption.options[index].text;
+        if(index==0){
+            //变量长度
+            sizelength = $(".sizelength").val();
+
+            //是否必填
+            var a = document.getElementsByName('choosevariables');
+            for (var i = 0; i < a.length; i++) {
+                if (a[i].checked == true) {
+                    val = a[i].value;
+                }
+            }
+        }else {
+            sizelength="";
+            val="";
+        }
+        //推到主菜单
+        $("#cancel").click();
+        //把数据写入
+        $(".big-custom").append(
+            " <div class=\"custom-bottom\">\n" +
+            "                <div class=\"custom-bottom-top\" style=\"width: 100%;height: 40px;margin-top: 5px;\">\n" +
+            "                    <div class=\"custom-input\" style=\"width: 10%;height: 100%;float: left;margin-top: 5px;\">\n" +
+            "                        <input type=\"checkbox\" value=\""+i+"\" class=\"input-u\">\n" +
+            "                    </div>\n" +
+            "                    <div class=\"custom-content\" style=\"width: 22.5%;height: 100%;float: left;\">\n" +
+            "                        <p>"+vab+"</p>\n" +
+            "                    </div>\n" +
+            "                    <div class=\"custom-content\" style=\"width: 22.5%;height: 100%;float: left;\">\n" +
+            "                        <p>"+value+"</p>\n" +
+            "                    </div>\n" +
+            "                    <div class=\"custom-content\" style=\"width: 22.5%;height: 100%;float: left;\">\n" +
+            "                        <p>"+sizelength+"</p>\n" +
+            "                    </div>\n" +
+            "                    <div class=\"custom-content\" style=\"width: 22.5%;height: 100%;float: left;\">\n" +
+            "                        <p>"+val+"</p>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "                <div class=\"custom-bottom-list\" style=\"width: 100%;height: 40px;\">\n" +
+            "                    <h4 id=\"toseemove\" style=\"float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;\n" +
+            "border: 1px solid #5E6173;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #5E6173;border-radius: 3px;\n" +
+            "text-align: center;line-height: 25px;margin-top: 0px;margin-right: 8px;cursor: pointer\">查看</h4>\n" +
+            "                    <h5 style=\"float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;\n" +
+            "border: 1px solid #5E6173;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #5E6173;border-radius: 3px;\n" +
+            "text-align: center;line-height: 25px;margin-top: 0px;margin-right: 10px\">变量查询</h5>\n" +
+            "                    <h6 style=\"float: right;display: block;width: 55px;height: 25px;box-sizing: border-box;\n" +
+            "border: 1px solid #1E8DE7;font-size: 12px;font-family: 'Microsoft YaHei UI';color: #1E8DE7;border-radius: 3px;\n" +
+            "text-align: center;line-height: 25px;margin-top: 0px;margin-right: 10px;cursor: pointer;\">添加</h6>\n" +
+            "                </div>\n" +
+            "            </div>"
+        )
+
+    }
+
+    //自定义条框确定按钮
+    function btnend() {
+        var vab = $(".variablesname").val();
+
+        if(vab)
+
+        $("#cancel").click();
+
+        $(".big-terms-bottom").append("<div class=\"terms-bottom\">\n" +
+            "                <div class=\"terms-bottom-left\" style=\"width: 10%;height: 100%;float: left;\">\n" +
+            "                    <input type=\"checkbox\" value=\"input-v\" class=\"input-v\" style=\"width: 15px;height: 15px;float: left;\n" +
+            "                    margin-left: 15px;margin-top: 12px;\">\n" +
+            "                </div>\n" +
+            "                <div class=\"terms-bottom-content\" style=\"width: 22.5%;height: 100%;float: left;text-align: center;\n" +
+            "font-family: 'Microsoft YaHei UI';font-size: 14px;color: #5E6173;line-height: 40px\">"+vab+"</div>\n" +
+            "                <div class=\"terms-bottom-right\" style=\"width: 55%;height: 100%;float: right;\">\n" +
+            "                    <div class=\"see\" style=\"width: 55px;height: 25px;border: 1px solid #1E8DE7;box-sizing: border-box;\n" +
+            "float: left;text-align: center;font-family: 'Microsoft YaHei UI';font-size: 12px;color: #1E8DE7;\n" +
+            "line-height: 25px;border-radius: 3px;margin-left: 5px;margin-top: 7px;cursor: pointer;\">添加</div>\n" +
+            "                    <div class=\"see\" style=\"width: 55px;height: 25px;border: 1px solid #d4d0c8;box-sizing: border-box;\n" +
+            "float: left;text-align: center;font-family: 'Microsoft YaHei UI';font-size: 12px;color: #48484A;\n" +
+            "line-height: 25px;border-radius: 3px;margin-left: 5px;margin-top: 7px;cursor: pointer;\">变量查询</div>\n" +
+            "                    <div class=\"see\" style=\"width: 55px;height: 25px;border: 1px solid #d4d0c8;box-sizing: border-box;\n" +
+            "float: left;text-align: center;font-family: 'Microsoft YaHei UI';font-size: 12px;color: #48484A;\n" +
+            "line-height: 25px;border-radius: 3px;margin-left: 5px;margin-top: 7px;cursor: pointer;\">查看</div>\n" +
+            "                </div>\n" +
+            "            </div>")
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看下拉选项</title>
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit"/>
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit"/>
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <script src="../js/json2.js"></script>
+    <script src="../js/selectivizr.js"></script>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        /*.tick-scroll::-webkit-scrollbar{*/
+        /*    display: none;*/
+        /*}*/
+        html {
+            /*隐藏滚动条，当IE下溢出，仍然可以滚动*/
+            -ms-overflow-style:none;
+            /*火狐下隐藏滚动条*/
+            overflow:-moz-scrollbars-none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="gotack" class="option-tick" style="width: 100%;height: 100%;">
+    <div class="tick-list" style=" position: absolute;top:0;left: 0;width: 100%;min-height: 28.9375rem;background-color: white;"><!--主边框-->
+        <div class="tick-list-top" style="position: relative;width: 100%;height: 2.5rem;background: linear-gradient(to right,#5DC1F7,#1E8DE7);"><!--查看框-->
+            <p style="position: absolute;left: 0;bottom: 0;font-family: 'Microsoft YaHei UI';
+font-size: 0.875rem;color: #ffffff;line-height: 2.5rem;font-weight: bold; display: inline-block;
+width: 100%;height: 100%;text-align: center;padding-left: 1.5625rem;">查看</p>
+        </div>
+        <div class="tick-list-content" style="width: 100%;height: 22.375rem;"><!--文本内容框-->
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float: left;
+margin-left: 0.9375rem;margin-top: 0.6875rem;">变量名称</p><span style="float: left;margin-top: 0.75rem;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 1rem;color: #E51C23;">*</span>
+            <input type="text" disabled="disabled" style="width: 95%;height: 2.5rem;float: left;margin-left: 0.9375rem;
+border: 1px solid #979797;box-sizing: border-box;border-radius: 0.1875rem;padding-left: 0.625rem" id="input_value">
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float: left;
+margin-left: 0.9375rem;margin-top: 0.9375rem;">类型</p>
+            <select disabled="disabled" style="width: 95%;height: 1.875rem;float: left;box-sizing: border-box;border-radius: 0.1875rem;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 0.9375rem;margin-top: 0.625rem;padding-left: 0.625rem;">
+                <option value="getoption" style="padding-left: 0.625rem">下拉选项</option>
+            </select>
+            <div class="tick-scroll" style="width: 100%;height: 11.25rem;float:left;margin-top:1.25rem;overflow-y: scroll;">
+            </div>
+        </div>
+        <div class="tick-list-bottom" style="width: 100%;height: 2.5rem;box-sizing: border-box;
+border-top: 1px solid #D8D8D8; text-align: center"><!--关闭框-->
+            <p id="toticklist" style="display: inline-block;width: 4.75rem;height: 1.5625rem;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 0.75rem;color: #ffffff;text-align: center;line-height: 1.5625rem;
+margin-top: 0.9375rem;border-radius: 0.1875rem; cursor: pointer;">关闭</p>
+        </div>
+    </div>
+</div><!--下拉选项查看弹出框-->
+
+
+<!--引入jQuery库-->
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var item = localStorage.getItem("dataoption");
+        var items = JSON.parse(item);
+
+        $("#input_value").val(items.templateParOptionDto.name);
+        for (var i = 0; i <items.templateParOptionDto.value.length; i++) {
+            $(".tick-scroll").append("<div class=\"tick-box\" style=\"width: 95%;min-height: 2.1875rem;margin-top: 0.1875rem\">\n" +
+                "                    <p style=\"display: inline-block;font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;\n" +
+                "width: 95%;margin-left: 0.9375rem;\">选项</p>\n" +
+                "                    <textarea style=\" width: 95%;min-height: 0.625rem;float: left;margin-left: 0.9375rem;margin-top: 0.3125rem;padding: 0.625rem 0.625rem;overflow-y:scroll;\" readonly=\"readonly\">"+items.templateParOptionDto.value[i]+"</textarea>\n" +
+                "                </div>")
+        }
+
+        $("#toticklist").click(function () {
+            localStorage.removeItem("dataoption");
+            window.opener = null;
+            window.open('', '_self');
+            window.close();
+        })
+    }
+
+</script>
+</body>
+</html>

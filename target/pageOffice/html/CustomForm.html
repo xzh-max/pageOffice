@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    .newly-added{
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+    }
+    .newly-added-title{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 95%;
+        min-height: 28.9375rem;
+        background-color: white;
+    }
+
+    .custom-variables{
+        width: 100%;
+        height: 2.5rem;
+        background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+    }
+    .custom-variables p{
+        font-family: "Microsoft YaHei UI";
+        font-size: 0.875rem;
+        color: #ffffff;
+        line-height: 2.5rem;
+        font-weight: bold;
+        float: left;
+        margin-left: 0.9375rem;
+    }
+    .variables-content input{
+        width: 95%;
+        height: 2.5rem;
+        border: 1px solid #979797;
+        border-radius: 0.1875rem;
+        box-sizing: border-box;
+        float: left;
+        margin-left: 0.9375rem;
+        margin-top: 0.3125rem;
+        padding-left: 0.9375rem;
+        line-height: 2.5rem;
+    }
+    .variables-bottom input{
+        width: 95%;
+        height: 2.5rem;
+        border: 1px solid #979797;
+        border-radius: 0.1875rem;
+        box-sizing: border-box;
+        float: left;
+        margin-left: 0.9375rem;
+        margin-top: 0.3125rem;
+        padding-left: 0.9375rem;
+        line-height: 2.5rem;
+    }
+    .list input{
+        width: 0.9375rem;
+        height: 0.9375rem;
+        margin-top: 0.75rem;
+        margin-left: 1.0625rem;
+        padding-left: 0.9375rem;
+        line-height: 2.5rem;
+    }
+    /*.option-content::-webkit-scrollbar{
+        display: none;
+    }*/
+    .variable:focus{
+        border: 1px solid #1E8DE7;
+    }
+    .variable{
+        padding-left: 0.625rem;
+    }
+    .option-text{
+        padding: 0.625rem 0.625rem;
+        width: 92%;height: 5rem;
+        float: left;margin-left: 0.9375rem;
+        border-radius: 0.1875rem;
+        margin-top: 0.1875rem;
+        border:1px solid #979797;
+        box-sizing: border-box;font-size: 0.875rem;
+        font-family: 'Microsoft YaHei UI';
+        color: #48484A;overflow: hidden
+    }
+    .option-text:focus{
+        border: 1px solid #1E8DE7;
+    }
+    .cutex{
+        width: 1.25rem;
+        height: 1.25rem;
+        float:right;
+        margin-right:1.25rem;
+        background: url(../image/delete.png) no-repeat center center;
+        background-size: 1.25rem 1.25rem;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+    .cutex:hover{
+        background-color: #f5f5f5;
+    }
+    .new-options{
+        width:  95%;height: 2.5rem;
+        float: left;font-family: 'Microsoft YaHei UI';
+        box-sizing: border-box;
+        border: 1px solid #1E8DE7;
+        font-size: 0.875rem;color: #1E8DE7;
+        margin-left: 0.9375rem;margin-top: 0.9375rem;
+        text-align: center;line-height: 2.5rem;
+        border-radius: 0.1875rem;cursor: pointer;
+        background: url(../image/newly-added-icon.png) no-repeat 8.75rem center;
+        background-size: 0.8125rem 0.8125rem;
+        padding-left: 0.625rem;margin-bottom: 1.25rem;
+    }
+    .new-options:hover{
+        background: #1E8DE7 url("../image/add-white.png") no-repeat 8.75rem center;
+        background-size: 0.8125rem 0.8125rem;
+        color: #FFFFff;
+        padding-left: 0.625rem;
+    }
+</style>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/json2.js"></script>
+<script type="text/javascript">
+    //下拉框选中时触发
+    function funchoose(){
+        var byId = document.getElementById("select-pid");
+        var index2 = byId.selectedIndex;
+        //变量类型
+        var text = byId.options[index2].text;
+        if(text=="下拉选项"){
+            //下拉框
+            $('#select-pid').css('margin-bottom','10px');
+            $(".numlength").css('display', 'none');
+            $('#getoption').css('display', 'block');
+
+            var count = 0 ;
+            if($(".option-text").val() == undefined || trim($(".option-text").val()) == "" || $(".option-content").html() == null || trim($('.variable').val()) == ''){
+                $(".spanagainCVT").css("display", "none");
+                $(".spanagain").css("display", "none");
+                $(".spanone").css("display", "none");
+                $(".spanagainOption").css("display", "block");
+                $(".openbtn").attr("disabled", true);
+                $(".openbtn").css("background-color","#5E6173");
+                return;
+            }else {
+                var len = $('.option-content').children('.option-list').length;
+                for(var i = 0; i < len; i++){
+                    if(trim($('.option-list').eq(i).children('.option-text').val()) == ""){
+                        count++
+                        $(".spanagainCVT").css("display", "none");
+                        $(".spanagain").css("display", "none");
+                        $(".spanone").css("display", "none");
+                        $(".spanagainOption").css("display", "block");
+                        $(".openbtn").attr("disabled", true);
+                        $(".openbtn").css("background-color","#5E6173");
+                        return;
+                    }
+                }
+
+                //变量名内容
+                var report=$(".variable").val();
+                var reportItem =trim(report);
+                sname = encodeURI(reportItem);
+                var param = false;
+                //判断名字是否重复
+                $.ajax({
+                    url:"queryByNameAndFid.do?fid="+fid+"&name="+sname,
+                    type:"POST",
+                    contentType: "application/json",
+                    data:{},
+                    success:function (data) {
+                        if(data != ""){
+                            if(data.paramType == undefined){
+                                //变量名没找到
+                                // alert("不重名")
+                                //主数据中查找变量名有没有和条款名重复
+                                var dataAeticle = localStorage.getItem("dataAll");
+                                var dataAs = JSON.parse(dataAeticle);
+                                if(dataAs.articleInfoDtos == "") {
+                                    $(".spanagainCVT").css("display", "none");
+                                    $(".spanagain").css("display", "none");
+                                    $(".spanone").css("display", "none");
+                                    $(".spanagainOption").css("display", "none");
+                                    $(".openbtn").attr("disabled", false);
+                                    $(".openbtn").css("background-color", "#1E8DE7");
+                                    param = false
+                                    return;
+                                }else {
+                                    //有重名
+                                    for( var i =0 ;i<dataAs.articleInfoDtos.length; i++){
+                                        if(dataAs.articleInfoDtos[i].name == sname){
+                                            // alert("重复")
+                                            $(".spanagainCVT").css("display", "block");
+                                            $(".spanagain").css("display", "none");
+                                            $(".spanone").css("display", "none");
+                                            $(".spanagainOption").css("display", "none");
+                                            $(".openbtn").attr("disabled", true);
+                                            $(".openbtn").css("background-color", "#5E6173");
+                                            param = false;
+                                            return;
+                                        }else {
+                                            // alert("不重复")
+                                            //判断下拉选项输入框的值
+                                            if ($('#option-content').html() == '') {
+                                                $(".spanagainCVT").css("display", "none");
+                                                $(".spanone").css("display", "none");
+                                                $(".spanagain").css("display", "none");
+                                                $(".spanagainOption").css("display", "none");
+                                                $(".openbtn").attr("disabled", true);
+                                                $(".openbtn").css("background-color", "#5E6173");
+                                                param = false;
+                                                return;
+                                            } else {
+                                                if ($('.option-text').val() == '') {
+                                                    $(".spanagainCVT").css("display", "none");
+                                                    $(".spanone").css("display", "none");
+                                                    $(".spanagain").css("display", "none");
+                                                    $(".spanagainOption").css("display", "none");
+                                                    $(".openbtn").attr("disabled", true);
+                                                    $(".openbtn").css("background-color", "#5E6173");
+                                                    param = false;
+                                                    return;
+                                                } else {
+                                                    $(".spanagainCVT").css("display", "none");
+                                                    $(".spanone").css("display", "none");
+                                                    $(".spanagain").css("display", "none");
+                                                    $(".spanagainOption").css("display", "none");
+                                                    $(".openbtn").attr("disabled", false);
+                                                    $(".openbtn").css("background-color", "#1E8DE7");
+                                                    param = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                param = true;
+                            }else {
+                                //变量名找到
+                                $(".spanagainCVT").css("display","none");
+                                $(".spanone").css("display","none");
+                                $(".spanagainOption").css("display","none");
+                                $(".spanagain").css("display","block");
+                                $(".openbtn").attr("disabled", true);
+                                $(".openbtn").css("background-color","#5E6173");
+                                param = false;
+                            }
+                        }else {
+                            $(".spanagainCVT").css("display", "none");
+                            $(".spanone").css("display", "none");
+                            $(".spanagainOption").css("display", "none");
+                            $(".spanagain").css("display", "none");
+                            $(".openbtn").attr("disabled", false);
+                            $(".openbtn").css("background-color", "#1E8DE7");
+                            param = true;
+                        }
+                    }
+                });
+                if(count == 0 && param == true){
+                    $(".openbtn").attr("disabled", false);
+                    $(".openbtn").css("background-color","#1E8DE7");
+                }else if (count != 0 && param == false) {
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color","#5E6173");
+                }
+            }
+        }else{
+
+            $('#select-pid').css('margin-bottom','180px');
+            $('.confirm').css('margin-top','10px');
+            if( $(".variable").val() !=''){
+
+                var report=$(".variable").val();
+                var reportItem =trim(report);
+                sname = encodeURI(reportItem);
+                $.ajax({
+                    url:"queryByNameAndFid.do?fid="+fid+"&name="+sname,
+                    type:"POST",
+                    contentType: "application/json",
+                    data:{},
+                    success:function (data) {
+                        //判断返回的变量值是否为空
+                        if(data != ""){
+                            if(data.paramType == undefined){
+                                //没有找到变量名说明变量名不重复，可用
+                                //主数据中查找变量名有没有和条款名重复
+                                var dataAeticle = localStorage.getItem("dataAll");
+                                var dataAs = JSON.parse(dataAeticle);
+                                //判断
+                                if(dataAs.articleInfoDtos == ""){
+                                    $(".spanagainCVT").css("display","none");
+                                    $(".spanagain").css("display","none");
+                                    $(".spanone").css("display","none");
+                                    $(".spanagainOption").css("display","none");
+                                    $(".openbtn").attr("disabled", false);
+                                    $(".openbtn").css("background-color","#1E8DE7");
+                                }else {
+                                    //有重名
+                                    for( var i =0 ;i<dataAs.articleInfoDtos.length; i++){
+                                        if(dataAs.articleInfoDtos[i].name == reportItem){
+                                            $(".spanagainCVT").css("display", "block");
+                                            $(".spanagain").css("display", "none");
+                                            $(".spanone").css("display", "none");
+                                            $(".spanagainOption").css("display", "none");
+                                            $(".openbtn").attr("disabled", true);
+                                            $(".openbtn").css("background-color", "#5E6173");
+                                            return;
+                                        }else {
+                                            $(".spanagainCVT").css("display","none");
+                                            $(".spanagain").css("display","none");
+                                            $(".spanone").css("display","none");
+                                            $(".spanagainOption").css("display","none");
+                                            $(".openbtn").attr("disabled", false);
+                                            $(".openbtn").css("background-color","#1E8DE7");
+                                        }
+                                    }
+                                }
+                            }else {
+                                //找到变量名说明变量名重复，不可用
+                                $(".spanagainCVT").css("display","none");
+                                $(".spanagain").css("display","block");
+                                $(".spanone").css("display","none");
+                                $(".spanagainOption").css("display","none");
+                                $(".openbtn").attr("disabled", true);
+                                $(".openbtn").css("background-color","#5E6173");
+                            }
+                        }else {
+                            $(".spanagainCVT").css("display","none");
+                            $(".spanagain").css("display","none");
+                            $(".spanone").css("display","none");
+                            $(".spanagainOption").css("display","none");
+                            $(".openbtn").attr("disabled", false);
+                            $(".openbtn").css("background-color","#1E8DE7");
+                        }
+                    }
+                })
+
+            }else{
+                $(".spanagainCVT").css("display", "none");
+                $(".spanagain").css("display","none");
+                $(".spanone").css("display","block");
+                $(".spanagainOption").css("display","none");
+                $(".openbtn").attr("disabled", true);
+                $(".openbtn").css("background-color","#5E6173");
+            }
+            $('#getoption').css('display', 'none');
+            $(".numlength").css("display","none");
+        }
+    }
+</script>
+<div class="variables-content" style="width: 100%;height: 6.875rem;"><!--名称框-->
+    <p style="font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float: left;
+margin-left: 0.9375rem;margin-top: 0.9375rem;">变量名称</p><span style="float: left;margin-top: 1rem;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 1rem;color: #E51C23;">*</span>
+    <input type="text" class="variable" oninput="variableFoucse()">
+    <div style="min-height: 1.5rem;width: 100%;overflow: hidden;">
+                <span class="spanone" style="float: left;display: block;font-size: 0.75rem;width: 100%;margin-left: 0.9375rem;
+margin-top: 0.3125rem;color: #E51C23;display: none">提示：变量名称不能为空</span>
+        <span class="spanagain" style="float: left;display: block;font-size: 0.75rem;width: 100%;margin-left: 0.9375rem;
+margin-top: 0.3125rem;color: #E51C23;display: none">提示：变量名称重复</span>
+        <span class="spanagainCVT" style="float: left;display: block;font-size: 0.75rem;width: 100%;margin-left: 0.9375rem;
+margin-top: 0.3125rem;color: #E51C23;display: none">提示：名称与条款名重复</span>
+        <span class="spanagainOption" style="float: left;display: block;font-size: 0.75rem;width: 100%;margin-left: 0.9375rem;
+margin-top: 0.3125rem;color: #E51C23;display: none">提示：下拉选择中不能为空</span>
+    </div>
+</div>
+
+<div class="text" class="variables-bottom" style="width: 100%;height: 24.125rem;"><!--内容框-->
+    <p style="font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float: left;
+margin-left: 0.9375rem;margin-top: 0.75rem;">类型</p><span style="float: left;margin-top: 0.5rem;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 1rem;color: #E51C23;">*</span>
+    <select style="width:92%;height: 1.875rem;float: left;box-sizing: border-box;border-radius: 0.1875rem;padding-left: 0.625rem;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 0.9375rem;margin-top: 0.375rem;margin-bottom: 11.8125rem;"id="select-pid" onchange="funchoose()">
+        <option value="text" style="padding-left: 0.625rem">文字</option>
+        <option value="num" style="padding-left: 0.625rem">数字</option>
+        <option value="date" style="padding-left: 0.625rem">日期</option>
+        <option value="getoption" style="padding-left: 0.625rem">下拉选项</option>
+    </select>
+    <p style="font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float: left;
+margin-left: 0.9375rem;margin-top: 0.9375rem;display: none;">是否必填</p>
+    <div class="list" style=" float:left;width: 100%;height: 2.5rem; display: none">
+        <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="是">
+        <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;
+margin-left: 0.4375rem;margin-top: 0.625rem;margin-right: 6.875rem;">是</p>
+        <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="否">
+        <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;
+margin-left: 0.4375rem;margin-top: 0.625rem">否</p>
+    </div>
+
+    <div class="getoption" class="newly-top" style="display: none;">
+        <div class="option-content" style="width: 100%;height: 9.5rem;overflow-y: scroll;">
+            <div class='option-list'; style="width: 100%;overflow: hidden;margin-top: 0.1875rem">
+                <p style="font-family:'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float:left;margin-left:0.9375rem;margin-top: 0px;">选项</p>
+                <span style="float:left;margin-top: 0px;margin-left: 2px;font-family:'Microsoft YaHei UI';font-size: 1rem;color:#E51C23;">*</span>
+                <div class='delex1'; vlaue='1'; class="cutex" style='' onclick="delexl('delex1')"></div>
+                <textarea class="option-text" oninput='changeCount()' autofocus="autofocus"></textarea></div>
+        </div>
+        <div class="new-options" onclick="newxx()">新增选项</div>
+    </div><!--自定义变量选项内容-->
+    <!--确定框-->
+    <div class="confirm" style="width: 100%; height: 2.5rem;float: left;padding-bottom: 1.875rem;border-top: 1px solid #d4d0c8;margin-top: 1.25rem;position: absolute;bottom: 1px;background: #fff; text-align: center">
+        <p class="openbtn" style="display: inline-block;width: 4.75rem;height: 1.5625rem;background-color: #5E6173;/*#1E8DE7;*/
+font-family: 'Microsoft YaHei UI';font-size: 0.75rem;color: #ffffff;text-align: center;line-height: 1.5625rem;
+margin-top: 1.5rem;border-radius: 0.1875rem;cursor: pointer" disabled="true" onclick="variablend()">确定</p>
+        <span class="cancel" style="display: inline-block;width: 4.75rem;height: 1.5625rem;background-color: #F2F3F7;
+font-family: 'Microsoft YaHei UI';font-size: 0.75rem;color: #5E6173;text-align: center;line-height: 1.5625rem;
+margin-left: 1.0625rem;margin-top: 1.5rem;border-radius: 0.1875rem; cursor: pointer">重置</span>
+    </div>
+</div>
+</body>
+</html>

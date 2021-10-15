@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文本选择</title>
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit"/>
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit"/>
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .text-selection{
+            width: 80px;
+            height: 25px;
+            border-bottom: 1px solid #1E8DE7;
+        }
+        .select-text{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:9999999999999;
+            -moz-opacity: 0.5;
+            opacity:.50;
+            filter: alpha(opacity=68);
+        }
+        .lister{
+            position: absolute;
+            top: 55px;
+            left: 30%;
+            width: 300px;
+            height: 200px;
+            background-color: white;
+        }
+        .lister-top{
+            width: 100%;
+            height: 40px;
+            position: relative;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+        }
+        .lister-top span{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: inline-block;
+            width: 50px;
+            height: 100%;
+            background: url(../image/close-button.png) no-repeat center center;
+            background-size: 15px 15px;
+            cursor: pointer;
+        }
+        .lister-content{
+            width: 100%;
+            height: 150px;
+        }
+        .lister-content p{
+            font-size: 14px;
+            font-family: "Microsoft YaHei UI";
+            color: #48484A;
+            margin-left: 20px;
+            margin-top: 15px;
+            float: left;
+            margin-right: 50px;
+        }
+        .list-aution{
+            width: 80px;
+            height: 25px;
+            float: left;
+            background-color: #1E8DE7;
+            border-radius: 3px;
+            margin-top: 30px;
+            font-size: 12px;
+            font-family: "Microsoft YaHei UI";
+            color: white;
+            text-align: center;
+            line-height: 25px;
+            border: 0px solid;
+            margin-left: 50px;
+            cursor: pointer;
+        }
+        .list-close{
+            width: 80px;
+            height: 25px;
+            float: left;
+            background-color: #1E8DE7;
+            border-radius: 3px;
+            margin-top: 30px;
+            font-size: 12px;
+            font-family: "Microsoft YaHei UI";
+            color: white;
+            text-align: center;
+            line-height: 25px;
+            border: 0px solid;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+        .lister-content input{
+            width: 180px;
+            height: 25px;
+            box-sizing: border-box;
+            border: 1px solid #D8D8D8;
+            float: left;
+            margin-left: 50px;
+            margin-top: 20px;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="gotext" class="text-selection"></div>
+<div id="closetext" class="select-text">
+    <div class="lister">
+        <div class="lister-top"><span id="topclose"></span></div>
+        <div class="lister-content">
+            <p>请选择</p>
+            <input type="text">
+            <div class="list-aution">确定</div>
+            <div id="listclose" class="list-close">取消</div>
+        </div>
+    </div>
+</div>
+
+<!--引入jquery库-->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/json2.js"></script>
+<script src="../js/selectivizr.js"></script>
+<script type="text/javascript">
+    $('#gotext').click(function () {
+        $('#closetext').css('display','block')
+    });
+    $('#topclose').click(function () {
+        $('#closelist').css('display','none')
+    });
+    $('#listclose').click(function () {
+        $('#closelist').css('display','none')
+    })
+</script>
+</body>
+</html>

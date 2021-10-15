@@ -1,0 +1,107 @@
+<html>
+<head>
+    <title>输入数量</title>
+    <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit"/>
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit"/>
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <link rel='stylesheet' type='text/css' href='dialog.css'>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/json2.js"></script>
+    <script src="../js/selectivizr.js"></script>
+    <script language=javascript>
+       var MarkName = localStorage.getItem("MarkName");
+       function IsNum(num) {
+           var str = num;
+           var len1 = str.substr(0, 1);
+           var len2 = str.substr(1, 1);
+           //如果第一位是0，第二位不是点，就用数字把点替换掉
+           if (str.length > 1 && len1 == 0 && len2 != ".") {
+               str = str.substr(1, 1);
+           }
+           //第一位不能是.
+           if (len1 == ".") {
+               str = "";
+           }
+           //限制只能输入一个小数点
+           if (str.indexOf(".") != -1) {
+               var str_ = str.substr(str.indexOf(".") + 1);
+               if (str_.indexOf(".") != -1) {
+                   str = str.substr(0, str.indexOf(".") + str_.indexOf(".") + 1);
+               }
+           }
+           //正则替换，保留数字和小数点
+           str = str.replace(/[^\d^\.]+/g,'');
+           var reg =/^-?(([0-9]{1,11}\.\d{1,6})|([0-9]{1,11}))$/;
+           if(!reg.test(str)){
+               if(str==""){
+               }else {
+                   alert("请输入不超过11位整数6位小数的数字");
+                   document.getElementById("deptName").value = "";
+               }
+           }else {
+               document.getElementById("deptName").value = str
+           }
+           return str;
+
+       }
+        function setValue() {
+            document.getElementById("deptName").placeholder = "请输入"+MarkName;
+            document.getElementById("markName").innerHTML = MarkName ;
+        }
+        function getValue() {
+            var deptName = document.getElementById("deptName").value;
+            if (deptName != null && deptName != "") {
+                window.external.DialogResult = deptName;
+            }
+            closeWindow();
+            return;
+        }
+        function closeWindow() {
+            window.opener = null;
+            window.open('', '_self');
+            window.close();
+        }
+    </script>
+    <style type="text/css">
+        .input-text2{
+            width: 95%;height: 1.875rem;
+            border-radius: 0px;border: 1px solid #ebebeb;
+            padding-left: 0.625rem;
+        }
+        .input-text2:focus{
+            border: 1px solid #1E8DE7;
+        }
+    </style>
+
+</head>
+<body leftmargin="0" rightmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<div id="page2">
+    <div style="width: 100%;background: #FFFFFF;margin: 0 auto;position: relative;">
+        <div style="background-image: linear-gradient(90deg, #5DC1F7 0%, #1E8DE7 100%);border-radius: 0.1875rem 0.1875rem 0 0;color: #fff;text-align: center;height: 2.5rem;line-height: 2.5rem;">输入数字</div>
+        <div style="width: 92%;margin: 0 auto;">
+            <p style="font-family: MicrosoftYaHei;font-size: 0.875rem;color: #48484A;margin: 1.25rem 0;" id="name"></p>
+            <p style="font-size: 0.875rem;color: #5E6173;letter-spacing: 0;line-height: 1.375rem;margin-bottom: 1.25rem;" id="AeticleName"></p>
+            <hr style="border-color: #ebebeb;border-top-width: 0"/>
+            <div id="rect1">
+                <p id="markName"></p><input type="number" id="deptName" placeholder="" class="input-text2" onblur="IsNum(this.value)"/>
+            </div>
+            <div style="width: 100%;height: 3.375rem;margin-top: 16.125rem;">
+                <hr style="border-color: #ebebeb;border-top-width: 0"/>
+                <div style="width: 100%;height: 4rem; text-align: center">
+                    <button style="background-image: linear-gradient(90deg, #1E8DE7 0%, #1E8DE7 100%);border-radius: 0.1875rem;text-align: center;color: #fff;width: 4.75rem;height: 1.5625rem;margin: 0.9375rem  0.9375rem 0 0;outline:none;border: none;cursor: pointer" onclick="getValue()">确认</button>
+                    <button style="background: #F2F3F7;border-radius: 0.1875rem;text-align: center;color: #5E6173;width: 4.75rem;height: 1.5625rem;outline:none;border: none;cursor: pointer" onclick="closeWindow()">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    setValue();
+</script>
+</body>
+</html>

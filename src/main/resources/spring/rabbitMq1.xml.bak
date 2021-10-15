@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:property-placeholder location="classpath:rabbitmq.properties"/>
+
+    <!--配置connection-factory，指定连接rabbit server参数-->
+    <!--或者这样配置，connection-factory元素实际就是注册一个org.springframework.amqp.rabbit.connection.CachingConnectionFactory实例-->
+    <rabbit:connection-factory id="connectionFactory" host="${mq.host}" port="${mq.port}" username="${mq.username}" password="${mq.password}"/>
+
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+    <!-- <rabbit:admin connection-factory="connectionFactory" />
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" /> -->
+
+    <!--定义queue  说明：durable:是否持久化
+    auto_delete: 当所有消费客户端连接断开后，是否自动删除队列
+    exclusive: 仅创建者可以使用的私有队列，断开后自动删除
+    -->
+    <rabbit:queue durable="true" auto-delete="false" exclusive="false" name="Generate.contract"/>
+
+    <!--定义topic-exchange -->
+    <!-- <rabbit:topic-exchange name="mq.asdfExChange" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="queue1" pattern="queue1Key"></rabbit:binding>
+            <rabbit:binding queue="queue2" pattern="queue2Key"></rabbit:binding>
+            <rabbit:binding queue="queue2" pattern="queue2Key"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:topic-exchange> -->
+
+    <!--定义direct-exchange  key对应的是发送消息是的routingkey -->
+    <rabbit:direct-exchange name="miaosha.exchange" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="Generate.contract" key="queueKey" ></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!-- 消息接收者 -->
+    <!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 -->
+    <bean id="DrugPurContractConsumer" class="com.pageOfficeServer.mq.DrugPurContractConsumer"/>
+    <bean id="yzCrtGrtConsumer" class="com.pageOfficeServer.mq.YzCrtGrtConsumer"/>
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener ref="DrugPurContractConsumer" queues="Generate.contract"/>
+        <rabbit:listener ref="yzCrtGrtConsumer" queues="Generate.contract"/>
+    </rabbit:listener-container>
+
+</beans>

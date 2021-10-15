@@ -1,0 +1,72 @@
+{
+"fid":"1",
+"entry":{
+"name":"reback",
+"type":"int",
+"length":"10"
+ },
+"options":[
+{"foptionValue":"20"},
+{"foptionValue":"30"}]
+}
+
+addArticles.do   入参
+{
+"fid":"1",
+"entry":
+     {
+        "name":"养鸡条款信息",
+        "articles":[{
+                        "content":"条款1：回收价格信息",
+                        "fentryIds":["1","2"]
+                    },
+                    {
+                        "content":"条款2：品种信息",
+                         "fentryIds":["1","2"]
+                    },
+                    {
+                        "content":"条款3：品种信息",
+                        "fentryIds":["1","2"]
+                    }]
+     }
+}
+
+
+tags:
+["{合同编号}","{甲方名称}","{乙方名称}","{甲方手机号码}","{乙方住址}"]
+
+templateParMarkDtos：
+[
+{
+"name":"违约金",
+"type":"字符",
+"length":10,
+"markNames":["PO_a1","PO_a2","PO_a3","PO_a4"]
+},
+{
+"name":"回收价格",
+"type":"字符",
+"length":10,
+"markNames":["PO_a1","PO_a2","PO_a3","PO_a4"]
+}
+]
+
+
+templateParOptionDtos：
+[
+{
+"name":"违约金",
+"values":["10","20","30"],
+"markInfos":["PO_a1","PO_a2","PO_a3","PO_a4"]
+},
+{
+"name":"回收价格",
+"values":["10","20","30"],
+"markInfos":["PO_a1","PO_a2","PO_a3","PO_a4"]
+}
+]
+
+
+test url:
+
+http://localhost:8080/pageOffice/index.jsp?templateNo=templateno-00000497&reqParam={"contractname":"HTYJ-001","othersubject":"王成","oursubject":"温氏集团"}

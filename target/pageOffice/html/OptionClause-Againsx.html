@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit"/>
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit"/>
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <title>选择条款</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .clause{
+            width: 100%;
+            height: 100%;
+        }
+        .clause-open{
+            overflow: hidden;
+            /*display: none;*/
+            /*position: absolute;*/
+            /*top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:9999999999999;*/
+            /*-moz-opacity: 0.5;*/
+            /*opacity:.50;*/
+            /*filter: alpha(opacity=68);*/
+        }
+        .clause-title{
+            /*position: absolute;*/
+            /*top: 44px;*/
+            /*left: 30%;*/
+            width: 100%;
+            height: 29.0625rem;
+            background-color: white;
+            overflow: hidden;
+        }
+        .clause-top{
+            width: 100%;
+            height: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+        }
+        .clause-top p{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 95%;
+            /*height: 100%;*/
+            font-family: "Microsoft YaHei UI";
+            font-size: 0.875rem;
+            color: #ffffff;
+            line-height: 2.5rem;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+        .clause-top span{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: inline-block;
+            width: 3.125rem;
+            height: 100%;
+            background: url(../image/close-button.png) no-repeat center center;
+            background-size:  0.9375rem  0.9375rem;
+            cursor: pointer;
+        }
+        .clause-content{
+            width: 100%;
+            height: 23rem;
+            overflow-y: scroll;
+        }
+        .open-one{
+            width: 95%;
+            height: 7.5rem;
+            margin: 0 auto;
+            box-sizing: border-box;
+            border-bottom: 1px solid #D8D8D8;
+        }
+        .open-one input{
+            width: 3%;
+            height:  0.9375rem;
+            float: left;
+            margin-top: 0.8125rem;
+        }
+        .open-one p{
+            font-family: "Microsoft YaHei UI";
+            font-size: 0.875rem;
+            color: #48484A;
+            float: left;
+            margin-top: 0.6875rem;
+            margin-left: 0.4375rem;
+        }
+        .test{
+            width: 90%;
+            height: 7rem;
+            float: left;
+            margin-left: 1.4375rem;
+            margin-top: 0.4375rem;
+            overflow: hidden;
+            padding: 0 0.625rem;
+            font-size: 1.125rem;
+            overflow-y:scroll;
+        }
+        .clause-bottom{
+            width: 100%;
+            height: 3.375rem;
+            border-top: 1px solid #D8D8D8;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .clause-bottom .p-determine{
+            display: inline-block;
+            width:  4.75rem;
+            height: 1.5625rem;
+            background-color: #1E8DE7;
+            font-family: 'Microsoft YaHei UI';
+            font-size: 0.75rem;
+            color: #ffffff;
+            text-align: center;
+            line-height: 1.5625rem;
+            margin-top:  0.9375rem;
+            border-radius: 0.1875rem;
+            cursor: pointer;
+        }
+        .clause-bottom .p-cancel{
+            display: inline-block;
+            width:  4.75rem;
+            height: 1.5625rem;
+            background-color: #F2F3F7;
+            font-family: 'Microsoft YaHei UI';
+            font-size: 0.75rem;
+            color: #5E6173;
+            line-height: 1.5625rem;
+            margin-left: 1.0625rem;
+            margin-top:  0.9375rem;
+            border-radius: 0.1875rem;
+            cursor: pointer;
+        }
+        .date{
+            width: 70%;float: right;
+            height: 1.875rem;border: 1px solid #979797;
+            border-radius: 0.1875rem;
+            margin-top:0.625rem;
+            padding-left: 0.625rem
+        }
+        .date:focus{
+            border: 1px solid #1E8DE7;
+        }
+        .textes{
+            width: 70%;float: right;
+            height: 1.875rem;border: 1px solid #979797;
+            border-radius: 0.1875rem;
+            margin-top:0.625rem;
+            padding-left: 0.625rem
+        }
+        .textes:focus{
+            border: 1px solid #1E8DE7;
+        }
+        .number{
+            width: 70%;float: right;
+            height: 1.875rem;border: 1px solid #979797;
+            border-radius: 0.1875rem;
+            margin-top:0.625rem;
+            padding-left: 0.625rem
+        }
+        .number:focus{
+            border: 1px solid #1E8DE7;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="toclause" class="clause">1111</div>-->
+<div id="goclause" class="clause-open" style="overflow: hidden;width: 100%;height: 100%">
+    <div class="clause-title">
+        <div class="clause-top"><p>选择条款</p></div>
+        <div class="clause-content">
+        </div>
+        <div class="clause-bottom">
+            <p class="p-determine" onclick="AeticleEnd()">确定</p>
+            <p class="p-cancel" onclick="Aeticleclose()">取消</p>
+        </div>
+    </div>
+</div>
+
+<div id="page2" style="display: none;width: 100%;height: 100%">
+    <div style="width: 100%;height: 30.625rem;background: #FFFFFF;border-radius: 0.1875rem;margin: 0 auto;position: relative;overflow: hidden">
+        <div style="background-image: linear-gradient(90deg, #5DC1F7 0%, #1E8DE7 100%);border-radius: 0.1875rem 0.1875rem 0 0;color: #fff;text-align: center;height: 2.5rem;line-height: 2.5rem;">输入变量</div>
+        <div style="width: 95%; height: 24.375rem; margin: 0 auto;overflow-y: scroll">
+            <p style="font-family: MicrosoftYaHei;font-size: 0.875rem;color: #48484A;margin:  0.9375rem 0;">当前条款</p>
+            <p style="font-size: 1.2rem;color: #5E6173;letter-spacing: 0;line-height: 1.375rem;margin-bottom: 1.25rem;" id="AeticleName"></p>
+            <hr style="border-color: #ebebeb;border-top-width: 0"/>
+            <div id="MarkDtos">
+
+            </div>
+            <!--<div style="width: 100%;height: 54px;margin-top: 100px;">
+
+            </div>-->
+        </div>
+        <div class="btn" style="height: 3.75rem;width: 100%;text-align: center">
+<!--            <hr style="border-color: #ebebeb;border-top-width: 0"/>-->
+            <button style="background-image: linear-gradient(90deg, #1E8DE7 0%, #1E8DE7 100%);border-radius: 0.1875rem;color: #fff;width:  4.75rem;height: 1.5625rem;margin:  0.9375rem  0.9375rem  0 0;outline:none;border: none;cursor: pointer" onclick="getValue()">确定</button>
+            <button style="background: #F2F3F7;border-radius: 0.1875rem;color: #5E6173;width:  4.75rem;height: 1.5625rem;outline:none;border: none;cursor: pointer" onclick="closeWindow();">取消</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/getpath.js"></script>
+<script src="../js/json2.js"></script>
+<script src="../js/selectivizr.js"></script>
+<script type="text/javascript">
+    var path = getpath();
+    var fid = localStorage.getItem("parentFid");
+    var arr = [];
+    var num =0;
+    var fentryIds = "";
+    window.onload =function () {
+        // alert(num);
+        var name = window.external.DialogArgs;
+        var item = localStorage.getItem("Datas");
+        var Article = localStorage.getItem("Article");
+        var data = JSON.parse(item);
+        for (var i = 0; i <data.articleInfoDtos.length ; i++) {
+            for(var j=0;j<data.articleInfoDtos[i].bookMarks.length;j++){
+                if(data.articleInfoDtos[i].bookMarks[j]==Article){
+                    for (var k = 0; k < data.articleInfoDtos[i].articleContentDtoList.length; k++) {
+                        num++;
+                        var typename = JSON.stringify(data.articleInfoDtos[i].articleContentDtoList[k].article);
+                        // var variable = typename.replace("{","").replace("}","");
+                        // // typename = typename.replace(variable, function(v){
+                        // //     typename=v.fontcolor('Red')
+                        // // });
+                        fentryIds = data.articleInfoDtos[i].articleContentDtoList[k].fentryIds;
+                        arr.push(fentryIds);
+                        var id = "option" + num;
+                        var fentryId = "";
+                        // alert(data.templateParMarkDtos[i])
+                        if (data.templateParMarkDtos[i] == undefined) {
+                            fentryId = data.articleInfoDtos[i].articleContentDtoList[j].fentryIds
+                            localStorage.setItem("fentryId", fentryId)
+                        } else {
+                            fentryId = data.templateParMarkDtos[i].fentryId;
+                            localStorage.setItem("fentryId", fentryId);
+                        }
+                        $('.clause-content').append("<div class=\"open-one\">\n" +
+                            "                <input type=\"checkbox\" class=\"input_aeticle\" name='choosevariables'; onclick='choosevariable(this)'; onchange='funchoose(\"" + id + "\")'>\n" +
+                            "                <p style='display: none' class='input-p'>" + typename + "</p>\n" +
+                            "                <p id=''>条款</p>\n" +
+                            "                <textarea  readonly=\"readonly\"; id=\'" + id + "\'; class=\"test\">" + typename + "</textarea>\n" +
+                            "            </div>");
+                    }
+                }
+            }
+        }
+
+    };
+
+
+    //复选框选择唯一
+    function choosevariable(obj) {
+        var choosevariables = document.getElementsByName("choosevariables");
+        for (var i = 0; i <choosevariables.length ; i++) {
+            if (choosevariables[i]!=obj && choosevariables[i].checked)
+            {
+                choosevariables[i].checked=!obj.checked ;
+            }
+        }
+    }
+
+    //复选框点击
+    var options = [];
+    var markvariras = new Array(new Array);
+    var count =0;
+    var TestValue;
+    var cuaseid;
+    function funchoose(id){
+        options.length = 0;
+        cuaseid = id;
+        setTimeout(function () {
+            var names ;
+            var inputs = document.getElementsByClassName("input_aeticle");
+            for (var i = 0; i <inputs.length ; i++) {
+                if(inputs[i].checked){
+                    TestValue = $(".test")[i].value;
+                    var re = /{(.*?)}/g;
+                    while (temp = re.exec(TestValue)) {
+                        var s = temp[0].replace('{', '').replace('}', '');
+                        options.push(s);
+                        // window.external.CallParentFunc(show_Article,s);
+                        names = encodeURI(options);
+                    }
+                }
+            }
+            $.ajax({
+                url:""+path+"/queryByNamesAndFid.do?fid="+fid+"&names="+names,
+                type:"POST",
+                contentType: "application/json;",
+                success : function(data) {
+                    if(data.templateparamMarkAndOptionModels == ""){
+                        return;
+                    }
+                    $("#goclause").css("display","none");
+                    $("#page2").css("display","block");
+                    $("#AeticleName").text(TestValue);
+                    count = 0;
+                    $("#MarkDtos").html("");
+                    $.each(data.templateparamMarkAndOptionModels,function (i,item) {
+                        var a = new Array();
+                        a[0]=item.name;
+                        a[1]="";
+                        markvariras[count]=a;
+                        var id="v" + count;
+                        var tr = "<div style=\"width: 100%;height: 3.125rem;margin-bottom: 0.625rem;\">\n" +
+                            "                <span style=\"width:20%;line-height: 3.125rem;float: left;font-size: 0.875rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\" class=\"optionList"+item.fentryId+";\"  onmouseover=\"this.title =this.innerHTML\">"+item.name+"</span>\n" +
+                            "                <select style=\"width:73%!important;float: right;height: 1.875rem;border: 1px solid #979797;border-radius: 0.1875rem;margin-top: 0.625rem;padding-left: 0.625rem\" id='"+id+"'onmouseover=\"this.title =this.value\">\n" +
+                            // "                     <option style='padding-left: 0.625rem;width:  4.75rem' value='' default>- 请选择 -</option>\n" +
+                            "                </select>\n"+
+                            "           <div style=\"clear:both;width:100%;height:1px;\"></div>\n"+
+                            "                <hr style=\"border-color: #ebebeb;border-top-width: 0\"/>\n"+
+                            "                </div>"
+
+                        var trs = "<div style=\"width: 100%;height: 3.125rem;margin-bottom: 0.625rem;\">\n" +
+                            "                <span style=\"width:20%;line-height: 3.125rem;float: left;font-size: 0.875rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\" class=\"optionList"+item.fentryId+";\"  onmouseover=\"this.title =this.innerHTML\">"+item.name+"</span>\n" +
+                            "                <select style=\"width:73%!important;float: right;height: 1.875rem;border: 1px solid #979797;border-radius: 0.1875rem;margin-top: 0.625rem;padding-left: 0.625rem\" id='"+id+"'onmouseover=\"this.title =this.value\">\n" +
+                            // "                     <option style='padding-left: 0.625rem;width:  4.75rem' value='' default>- 请选择 -</option>\n" +
+                            "                </select>\n"+
+                            "           <div style=\"clear:both;width:100%;height:1px;\"></div>\n"+
+                            "                <hr style=\"border-color: #ebebeb;border-top-width: 0\"/>\n"+
+                            "                </div>"
+                        // alert(JSON.stringify(data.templateparamMarkAndOptionModels));
+                        if(item.paramType=="2"){
+                            if(item.type=="日期"){
+                                // alert("日期")
+                                var time  = new Date();
+                                var day = ("0" + time.getDate()).slice(-2);
+                                var month = ("0" + (time.getMonth() + 1)).slice(-2);
+                                var today = time.getFullYear() + "-" + (month) + "-" + (day);
+                                $("#MarkDtos").append("<div style=\"width: 100%;height: 3.125rem;margin-bottom: 0.625rem;\" class='MarkDiv'>\n" +
+                                    "                <p style=\"width:20%;line-height: 3.125rem;float: left;font-size: 0.875rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\" onmouseover=\"this.title =this.innerHTML\">" + item.name + "</p>\n" +
+                                    "                <input class='date' type=\"date\" name=\"\" placeholder=\"请输入日期\" value="+today+" id='" + id + "'/>\n" +
+                                    "                <div style=\"clear:both;width:100%;height:1px;\"></div>\n" +
+                                    "                <hr style=\"border-color: #ebebeb;border-top-width: 0;\"/>\n" +
+                                    "                </div>");
+                            }else if(item.type=="文字") {
+                                // alert("文字")
+                                $("#MarkDtos").append("<div style=\"width: 100%;height: 3.125rem;margin-bottom: 0.625rem;\" class='MarkDiv'>\n" +
+                                    "                <p style=\"width:20%;line-height: 3.125rem;float: left;font-size: 0.875rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\"onmouseover=\"this.title =this.innerHTML\">" + item.name + "</p>\n" +
+                                    "                <input class='textes' type=\"text\" name=\"\" placeholder=\"请输入文字\" value=\"\" id='" + id + "'/>\n" +
+                                    "                <div style=\"clear:both;width:100%;height:1px;\"></div>\n" +
+                                    "                <hr style=\"border-color: #ebebeb;border-top-width: 0;\"/>\n" +
+                                    "                </div>");
+                            }else if(item.type=="数字"){
+                                // alert("数字")
+                                $("#MarkDtos").append("<div style=\"width: 100%;height: 3.125rem;margin-bottom: 0.625rem;\" class='MarkDiv'>\n" +
+                                    "                <p style=\"width:20%;line-height: 3.125rem;float: left; font-size: 0.875rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;\"onmouseover=\"this.title =this.innerHTML\">" + item.name + "</p>\n" +
+                                    "                <input class='number' type=\"number\" name=\"\" placeholder=\"请输入数字\" value=\"\" id='" + id + "' onblur=\"IsNum(this.value)\" />\n" +
+                                    "                <div style=\"clear:both;width:100%;height:1px;\"></div>\n" +
+                                    "                <hr style=\"border-color: #ebebeb;border-top-width: 0;\"/>\n" +
+                                    "                </div>");
+                            }
+                        }else if(item.paramType=="3"){
+                            // alert("下拉选项")
+                            if(data.templateparamMarkAndOptionModels.length == null && data.templateparamMarkAndOptionModels.length == ""){
+                            }else {
+                                if (i == (data.templateparamMarkAndOptionModels.length - 1)) {
+                                    $("#MarkDtos").append(trs);
+                                } else {
+                                    $("#MarkDtos").append(tr);
+                                }
+                            }
+                            if(item.value != null && item.value != "") {
+                                for (var j = 0; j < item.value.length; j++) {
+                                    $("#"+id).append("<option style=\"padding-left:0.625rem;width:5rem!important\" value='"+ item.value[j] +"'  onmouseover=\"this.title = this.value\">" + item.value[j] + "</option>");
+
+                                }
+                            }
+                        }
+                        count++;
+                    })
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    // alert(XMLHttpRequest.status)
+                }
+            });
+        },200);
+    }
+
+    //判斷數字框數字大小
+    function IsNum (num) {
+        var str = num;
+        var len1 = str.substr(0, 1);
+        var len2 = str.substr(1, 1);
+        //如果第一位是0，第二位不是点，就用数字把点替换掉
+        if (str.length > 1 && len1 == 0 && len2 != ".") {
+            str = str.substr(1, 1);
+        }
+        //第一位不能是.
+        if (len1 == ".") {
+            str = "";
+        }
+        //限制只能输入一个小数点
+        if (str.indexOf(".") != -1) {
+            var str_ = str.substr(str.indexOf(".") + 1);
+            if (str_.indexOf(".") != -1) {
+                str = str.substr(0, str.indexOf(".") + str_.indexOf(".") + 1);
+            }
+        }
+        //正则替换，保留数字和小数点
+        str = str.replace(/[^\d^\.]+/g,'');
+        var reg =/^-?(([0-9]{1,11}\.\d{1,6})|([0-9]{1,11}))$/;
+        if(!reg.test(str)) {
+            if (str == "") {
+            } else {
+                alert("请输入不超过11位整数6位小数的数字");
+            }
+        }
+        return str;
+
+    }
+
+    //输入变量确认按钮
+    function getValue() {
+        var AeticleName = $("#AeticleName").text();
+        for (var i=0;i<count;i++){
+            var id="v" + i;
+            var val = $("#"+id+" option:selected").text();
+            if(val == null || val == ""){
+                var val = $("#"+id).val();
+            }
+            var a = new Array();
+            a=markvariras[i];
+            a[1]=val;
+            markvariras[i]=a;
+        }
+        var item = localStorage.getItem("Datas");
+        var data = JSON.parse(item);
+        for (var i = 0; i < data.templateParMarkDtos.length; i++) {
+            if (data.templateParMarkDtos[i].fentryId == localStorage.getItem("fentryId")) {
+                data.templateParMarkDtos[i].name = markvariras[1]
+            }
+        }
+        localStorage.setItem('newData',data)
+        for (var i=0;i<count;i++) {
+            var a = new Array();
+            a=markvariras[i];
+            var vname=a[0];
+            // alert("vname="+vname+"  val="+a[1]);
+            var val=a[1];
+            AeticleName = AeticleName.replace("{"+vname+"}",val);
+        }
+        // alert(TestValue)
+        $("#"+cuaseid).val(AeticleName);
+        // alert(AeticleName)
+        count=0;
+        closeWindow();
+    }
+
+
+    //改变变量更改关闭
+    function closeWindow() {
+        $("#goclause").css("display","block");
+        $("#page2").css("display","none");
+    }
+
+
+    //页面关闭
+    function Aeticleclose() {
+        window.opener = null;
+        window.open('', '_self');
+        window.close();
+    }
+
+    //确认
+    function AeticleEnd() {
+        var val =  $("#"+cuaseid).val();
+        val=val.replace("\"","").replace("\"","");
+        if(val == undefined){
+            return;
+        }
+        var newData = localStorage.getItem('newData');
+        localStorage.setItem('data',newData);
+        window.external.DialogResult = val;
+        Aeticleclose();
+    };
+
+
+</script>
+</body>
+</html>

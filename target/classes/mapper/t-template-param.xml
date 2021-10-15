@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pageOfficeServer.mapper.TemplateParamMapper">
+
+    <select id="getTemplateByTemplateNo" resultType="com.pageOfficeServer.model.TemplateParamModel">
+        select * from  t_template_param where templateId = #{templateNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getParamEntrys" resultType="com.pageOfficeServer.model.TemplateParamEntryModel">
+        SELECT t2.* from t_template_param_entry t2 where t2.fid=#{fid}
+    </select>
+
+    <select id="getByFentryId" resultType="com.pageOfficeServer.model.TemplateParamEntryModel">
+        SELECT * from t_template_param_entry where fentryId=#{fentryId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getModelById" resultType="com.pageOfficeServer.model.TemplateParamModel">
+        SELECT * from t_template_param where fid=#{fid,jdbcType=BIGINT}
+    </select>
+
+
+    <select id="getOptions" resultType="com.pageOfficeServer.model.TemplateParamOptionModel">
+        SELECT * from t_template_param_option where fentryId=#{fentryId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getMarkInfo" resultType="com.pageOfficeServer.model.TemplateParamMarkInfoModel">
+        SELECT * from t_template_param_markinfo where fentryId=#{fentryId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="saveParamEntry" parameterType="com.pageOfficeServer.model.TemplateParamEntryModel"  useGeneratedKeys="true"
+           keyProperty="fentryId" keyColumn="fentryId">
+        insert into t_template_param_entry
+        ( fid, name,
+        <if test="type!=null and type!=''">
+        type,
+        </if>
+
+        <if test="length!=null and length!=''">
+        length,
+        </if>
+
+        paramType
+        )
+        values
+        (
+            #{fid,jdbcType=BIGINT},
+            #{name,jdbcType=VARCHAR},
+        <if test="type!=null and type!=''">
+            #{type,jdbcType=VARCHAR},
+        </if>
+        <if test="length!=null and length!=''">
+            #{length,jdbcType=BIGINT},
+        </if>
+            #{paramType,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+    <insert id="saveParamEntrys" parameterType="java.util.List">
+        insert into t_template_param_entry
+        ( fid, name,paramType,syskey
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.fid,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.paramType,jdbcType=VARCHAR},
+            #{item.syskey,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="saveParamMarkInfo" parameterType="com.pageOfficeServer.model.TemplateParamMarkInfoModel"  useGeneratedKeys="true">
+        insert into t_template_param_markinfo
+        (fentryId,fmark,fvalue)
+        values
+        (
+        #{fentryId,jdbcType=BIGINT},
+        <if test="fmark!=null and fmark!=''">
+            #{fmark,jdbcType=VARCHAR},
+        </if>
+        <if test="fvalue!=null and fvalue!=''">
+            #{fvalue,jdbcType=VARCHAR},
+        </if>
+        )
+    </insert>
+
+
+    <insert id="saveParamMarkInfos" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into t_template_param_markinfo
+        (fentryId,fmark,fvalue)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.fentryId},
+            #{item.fmark},
+            #{item.fvalue}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="saveParamOptionInfo" parameterType="com.pageOfficeServer.model.TemplateParamOptionModel"  useGeneratedKeys="true">
+        insert into t_template_param_option
+        (fentryId,foptionValue)
+        values
+        (
+        #{fentryId,jdbcType=BIGINT},
+        <if test="foptionValue!=null and foptionValue!=''">
+            #{foptionValue,jdbcType=VARCHAR}
+        </if>
+        )
+    </insert>
+
+
+    <insert id="saveParamOptionInfos" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into t_template_param_option
+        (fentryId,foptionValue)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.fentryId},
+            #{item.foptionValue}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryByMarkInfo" resultType="com.pageOfficeServer.model.TemplateParamEntryModel">
+        SELECT * from t_template_param_entry where fentryId=#{fentryId,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryByMark" resultType="com.pageOfficeServer.model.TemplateParamMarkInfoModel">
+        SELECT * from t_template_param_markinfo where fmark=#{fmark,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="removeParamEntryById" >
+        delete  from  t_template_param_entry where fentryId=#{fentryId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="removeParamEntryOptionsById" >
+        delete  from  t_template_param_option where fentryId=#{fentryId,jdbcType=BIGINT}
+    </delete>
+
+
+    <!--  保存条款记录  -->
+    <insert id="saveArticle" useGeneratedKeys="true" keyProperty="farticleId" parameterType="com.pageOfficeServer.model.TemplateArticleModel">
+        insert into t_template_articles
+        (fid,name)
+        values
+        (#{fid,jdbcType=BIGINT},
+        #{name,jdbcType=VARCHAR})
+    </insert>
+
+    <!--  保存条款表多条条款内容  -->
+    <insert id="saveArticleContent" useGeneratedKeys="true" keyProperty="farticleContentId" parameterType="com.pageOfficeServer.model.ArticleContentModel">
+        insert into t_template_articles_content
+        (farticleId,article)
+        values
+         (#{farticleId,jdbcType=BIGINT},
+        #{article,jdbcType=VARCHAR})
+    </insert>
+
+    <!--  保存条款表条款内容对应的变量id  -->
+    <insert id="saveArticleRelation"  parameterType="com.pageOfficeServer.model.ArticleEntryRelationModel">
+        insert into t_template_articles_entry_relation
+        (fentryId,farticleContentId)
+        values
+        (#{fentryId,jdbcType=BIGINT},
+        #{farticleContentId,jdbcType=BIGINT})
+    </insert>
+
+    <!--  批量保存条款表条款内容对应的变量id  -->
+    <insert id="saveArticleRelations"  parameterType="com.pageOfficeServer.model.ArticleEntryRelationModel">
+        insert into t_template_articles_entry_relation
+        (fentryId,farticleContentId)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.fentryId,jdbcType=BIGINT},
+            #{item.farticleContentId,jdbcType=BIGINT}
+            )
+        </foreach>
+
+    </insert>
+
+    <!--  查询条款总数  -->
+    <insert id="qeueryArticleByFid" useGeneratedKeys="true" keyProperty="userId" parameterType="com.pageOfficeServer.model.TemplateArticleModel">
+        select * from t_template_articles
+        where fid=#{fid}
+    </insert>
+
+    <!--  查询每条条款条款内容  -->
+    <insert id="qeueryArticlesByFarticleId" useGeneratedKeys="true" keyProperty="userId" parameterType="com.pageOfficeServer.model.TemplateArticleModel">
+        select * from t_template_articles_content
+        where farticleId=#{farticleId}
+    </insert>
+
+    <select id="queryArticleById" resultType="com.pageOfficeServer.model.TemplateArticleModel">
+        select * from t_template_articles where farticleId=#{farticleId}
+    </select>
+
+    <select id="queryContentsById" resultType="com.pageOfficeServer.model.ArticleContentModel">
+        select * from t_template_articles_content where farticleId=#{farticleId}
+    </select>
+
+    <select id="queryArticleContentsById" resultType="com.pageOfficeServer.model.ArticleEntryRelationModel">
+        select * from t_template_articles_entry_relation where farticleContentId=#{farticleContentId}
+    </select>
+
+    <delete id="removeArticleContentsByIds">
+        delete from t_template_articles_entry_relation where farticleContentId=#{farticleContentId}
+    </delete>
+
+    <delete id="removeContentsById">
+        delete from t_template_articles_content where farticleId=#{farticleId}
+    </delete>
+
+    <delete id="removeArticleById">
+        delete from t_template_articles where farticleId=#{farticleId}
+    </delete>
+
+    <select id="queryTemplateArticleByFid" resultType="com.pageOfficeServer.model.TemplateArticleModel">
+        select * from t_template_articles where  fid=#{fid}
+    </select>
+
+    <!--  查询每条条款内容对应的变量信息  -->
+    <select id="queryArticleEntryRelationByContentId" resultType="com.pageOfficeServer.model.ArticleEntryRelationModel">
+        select * from t_template_articles_entry_relation
+        where farticleContentId=#{farticleContentId}
+    </select>
+
+    <insert id="addTemplateInfo" parameterType="com.pageOfficeServer.model.TemplateParamModel" useGeneratedKeys="true" keyProperty="fid" >
+        insert into t_template_param
+        (templateId)
+        values
+        (#{templateId})
+    </insert>
+
+    <delete id="removeTemplateParam">
+        delete from t_template_param where fid=#{fid}
+    </delete>
+
+    <delete id="removeSysParamEntrys">
+        delete from t_template_param_entry where fid=#{fid} and  paramType=#{paramType}
+    </delete>
+
+    <insert id="saveHandsSysInfo" parameterType="java.util.List">
+        insert into t_template_contract_sysvalue_info
+        ( contractNo, sysKey,sysValue
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.contractNo,jdbcType=BIGINT},
+            #{item.sysKey,jdbcType=VARCHAR},
+            #{item.sysValue,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryHandsSysInfo"  resultType="com.pageOfficeServer.model.HandSysInfoModel">
+        select * from t_template_contract_sysvalue_info where contractNo=#{contractNo,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteHandsSysInfo">
+        delete from t_template_contract_sysvalue_info where contractNo=#{contractNo,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="queryArticleByFidAndName" resultType="com.pageOfficeServer.model.TemplateArticleModel">
+        select * from t_template_articles where  fid=#{fid} and  name = #{name}
+    </select>
+
+    <select id="queryConsumerFail" resultType="com.pageOfficeServer.model.ConsumerFailModel">
+        select * from t_mq_consumer_fail limit 0,500
+    </select>
+
+    <insert id="addConsumerFail" parameterType="com.pageOfficeServer.model.ConsumerFailModel">
+        insert into  t_mq_consumer_fail
+        (
+        mqexchange, mqtagkey,msg,exceptionInfo
+        )values (
+        #{mqexchange},
+        #{mqtagkey},
+        #{msg},
+        #{exceptionInfo}
+        )
+    </insert>
+
+    <delete id="removeConsumerFail">
+        delete from  t_mq_consumer_fail where  id=#{id}
+    </delete>
+
+    <insert id="addBookMarks" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into t_template_bookmark
+        (fid, bookmark)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.fid,jdbcType=VARCHAR},
+            #{item.bookMark,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryBkByFid" resultType="com.pageOfficeServer.model.BooKMarkModel">
+        select * from  t_template_bookmark where fid=#{fid}
+    </select>
+
+    <delete id="removeBkByFid">
+        delete from t_template_bookmark where fid=#{fid}
+    </delete>
+
+    <insert id="saveParamBookMarkModels" parameterType="java.util.List"  useGeneratedKeys="true">
+        insert into t_param_bookmark
+        (fid,fparamId,type,bookMark)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.fid,jdbcType=INTEGER},
+            #{item.fparamId,jdbcType=INTEGER},
+            #{item.type,jdbcType=VARCHAR},
+            #{item.bookMark,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryParamBookMarkBy" resultType="java.lang.String">
+        select bookMark from  t_param_bookmark where  type= #{type} and  fparamId=#{fparamId}
+    </select>
+
+    <update id="updateTemplateStatus">
+        update t_template_param set templateType=#{status}
+        where templateId=#{templateNo}
+    </update>
+
+    <select id="queryParamBookMarkByFid" resultType="java.lang.String">
+        select bookMark from  t_param_bookmark where  fid=#{fid}
+    </select>
+
+    <delete id="batchdeleteBks" parameterType="String">
+        DELETE FROM  t_param_bookmark  WHERE bookMark IN
+        <foreach collection="array" item="bookMark" open="(" separator="," close=")">
+            #{bookMark}
+        </foreach>
+        and  fid=#{fid}
+    </delete>
+
+    <select id="queryOpenStatus" resultType="java.lang.String">
+        select  businessType from t_template_param where templateId=#{templateNo}
+    </select>
+
+    <update id="updateOpenStatus">
+        update t_template_param set businessType=#{openStatus} where fid=#{fid}
+    </update>
+
+    <insert id="addTemplateFile" parameterType="com.pageOfficeServer.model.TemplateFileModel" useGeneratedKeys="true">
+        insert  into t_template_file (fileId,path)values (#{fileId},#{path})
+    </insert>
+
+    <select id="queryTemplateFileById" resultType="com.pageOfficeServer.model.TemplateFileModel">
+        select * from t_template_file where fileId=#{fileId}
+    </select>
+
+    <update id="modifyParamInfo">
+        update t_template_param_entry set name=#{name},type =#{type},length=#{length},paramType=#{paramType}where fentryId=#{fentryId}
+    </update>
+    
+    <select id="queryTemplateArticleContent" resultType="com.pageOfficeServer.model.ArticleEntryRelationModel">
+        select * from t_template_articles_entry_relation where fentryId=#{fentryId}
+    </select>
+</mapper>

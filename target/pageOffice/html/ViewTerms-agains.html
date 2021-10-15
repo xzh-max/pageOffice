@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看条款</title>
+    <!-- 强制Chromium内核，作用于360浏览器、QQ浏览器等国产双核浏览器 -->
+    <meta name="renderer" content="webkit"/>
+    <!-- 强制Chromium内核，作用于其他双核浏览器 -->
+    <meta name="force-rendering" content="webkit"/>
+    <!-- 如果有安装 Google Chrome Frame 插件则强制为Chromium内核，否则强制本机支持的最高版本IE内核，作用于IE浏览器 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <style>
+        html {
+            /*隐藏滚动条，当IE下溢出，仍然可以滚动*/
+            -ms-overflow-style:none;
+            /*火狐下隐藏滚动条*/
+            overflow:-moz-scrollbars-none;
+        }
+        /*Chrome下隐藏滚动条，溢出可以透明滚动*/
+        html::-webkit-scrollbar{width:0px}
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .trems-option::-webkit-scrollbar{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="treaml" class="big-trems-tick" style="width: 100%;height: 100%;">
+    <div class="trems-content" style=" position: absolute;top:0;left:0;width: 95%;min-height: 28.9375rem;background-color: white;"><!--主框-->
+        <div class="trems-content-top" style="position: relative;width: 100%;height: 2.5rem;background: linear-gradient(to right,#5DC1F7,#1E8DE7);"><!--查看框-->
+            <p style="position: absolute;left: 0;bottom: 0;font-family: 'Microsoft YaHei UI';
+font-size: 0.875rem;color: #ffffff;line-height: 2.5rem;font-weight: bold; display: inline-block;
+width: 21.875rem;height: 100%;text-align: center;padding-left: 1.5625rem;">查看</p>
+        </div>
+        <div class="trems-content-list" style="width: 100%;height: 22.375rem;"><!--内容款-->
+            <p style="font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;float: left;
+margin-left: 0.9375rem;margin-top: 0.6875rem;">条款名称</p><span style="float: left;margin-top: 0.75rem;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 1rem;color: #E51C23;">*</span>
+            <input type="text" disabled="disabled" style="width: 95%;height: 2.5rem;float: left;margin-left: 0.9375rem;
+border: 1px solid #979797;box-sizing: border-box;border-radius:  0.1875rem;padding-left: 0.625rem" id="input-TKvalue">
+            <div class="trems-option" style="width: 100%;height: 16.25rem;float:left;margin-top:1.25rem;overflow-y: scroll;">
+                <div class="trems-tick" style="width: 100%;min-height: 0.625rem;">
+
+                </div>
+            </div>
+        </div>
+        <div class="trems-content-bottom" style="width: 100%;height: 2.8125rem;border-top: 1px solid #d4d0c8;text-align: center;"><!--关闭按钮-->
+            <p id="totremslist" style="display: inline-block;width: 4.75rem;height: 1.5625rem;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 0.75rem;color: #ffffff;text-align: center;line-height: 1.5625rem;
+margin-top: 1.25rem;border-radius: 0.1875rem; cursor: pointer;" onclick="del()">关闭</p>
+        </div>
+    </div>
+</div><!--条款查看弹出框-->
+
+
+<!--引入jQuery库-->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/json2.js"></script>
+<script src="../js/selectivizr.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var tr ="";
+        var name = localStorage.getItem("TKname");
+        // alert(name)
+        var contents = localStorage.getItem("contents");
+        var items = JSON.parse(contents);
+        for (var i =0 ; i<items.length; i++) {
+            tr +="<div class=\"trems-tick\" style=\"width: 100%;height: 8.125rem;\">\n" +
+                "                    <p style=\"display: inline-block;font-family: 'Microsoft YaHei UI';font-size: 0.875rem;color: #48484A;\n" +
+                "width: 100%;margin-left: 0.9375rem;\">条款</p>\n" +
+                "                    <textarea style=\"width: 95%;height: 5.625rem;float: left;margin-left: 0.9375rem;margin-top: 0.3125rem;padding: 0.625rem;padding-left:0.625rem;overflow-y: scroll\" readonly=\"readonly\">" + items[i] + "</textarea>\n" +
+                "                </div>"
+        }
+        $(".trems-option").append(tr);
+        $("#input-TKvalue").val(name);
+    }
+    function del() {
+        window.opener = null;
+        window.open('', '_self');
+        window.close();
+    }
+</script>
+</body>
+</html>

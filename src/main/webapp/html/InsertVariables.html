@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>变量选项</title>
+    <style>
+        .system-variables{
+            width: 100%;
+            height: 100%;
+        }
+        .system-variables-top{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 400px;
+            height: 608px;
+            background-color: white;
+        }
+        .system-title{
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to right,#5DC1F7,#1E8DE7);
+        }
+        .system-title p{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            font-family: "Microsoft YaHei UI";
+            font-size: 14px;
+            color: #ffffff;
+            line-height: 40px;
+            font-weight: bold;
+            display: inline-block;
+            width: 350px;
+            height: 100%;
+            text-align: center;
+            padding-left: 25px;
+        }
+        .system-title span{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            display: inline-block;
+            width: 50px;
+            height: 100%;
+            background: url(../image/close-button.png) no-repeat center center;
+            background-size: 15px 15px;
+            cursor: pointer;
+        }
+        .system-list-left{
+            width: 50%;
+            height: 100%;
+            float: left;
+            background-color: #ffffff;
+            font-family: 'Microsoft YaHei UI';
+            font-size: 16px;color: #5E6173;
+            text-align: center;
+            line-height: 45px;
+            font-weight: bold;cursor: pointer;
+        }
+        .system-list-right{
+            width: 50%;
+            height: 100%;
+            float: left;
+            font-family: 'Microsoft YaHei UI';
+            font-size: 14px;
+            color: #5E6173;
+            text-align: center;
+            line-height: 45px;
+            cursor: pointer;
+        }
+        .variables-content input{
+            width: 370px;
+            height: 40px;
+            border: 1px solid #979797;
+            border-radius: 3px;
+            box-sizing: border-box;
+            float: left;
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+        .variables-bottom input{
+            width: 370px;
+            height: 40px;
+            border: 1px solid #979797;
+            border-radius: 3px;
+            box-sizing: border-box;
+            float: left;
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+        .list input{
+            width: 15px;
+            height: 15px;
+            margin-top: 12px;
+            margin-left: 17px;
+        }
+    </style>
+</head>
+<body>
+<div id="gosystem" class="system-variables">
+    <div class="system-variables-top">
+        <div class="system-title"><p>变量选项</p></div>
+        <div class="system-list" style="width: 100%;height: 45px;background-color: #D8D8D8;">
+            <span id="list-left"  class="variableList">全部变量</span>
+            <span id="list-right" class="variableList">其他变量</span>
+        </div><!--变量选项-系统变量导航-->
+        <div class="system-content" style="width: 100%;height: 469px;overflow-y: scroll;">
+
+        </div><!--变量选项-系统变量内容-->
+        <div class="system-content-2" style="width: 100%;height: 469px;display: none;">
+            <div class="variables-content" style="width: 100%;height: 170px;">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">变量名称</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <input type="text" class="variable">
+                <span class="spanone" style="float: left;display: block;font-size: 12px;width: 100%;margin-left: 15px;
+margin-top: 5px;color: #E51C23;display: none">提示：变量名称不能为空</span>
+                <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;margin-top: 15px;
+margin-left: 15px">类型</p>
+                <select style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px;" id="select">
+                    <option value="text" >文本</option>
+                    <option value="getoption"  >下拉选项</option>
+                </select>
+            </div>
+            <div id="text" class="variables-bottom" style="width: 100%;height: 300px; border-bottom: 1px solid #D8D8D8;box-sizing: border-box;">
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 0px;">字段类型</p><span style="float: left;margin-top: 0px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                <select style="width: 370px;height: 30px;float: left;box-sizing: border-box;border-radius: 3px;
+border: 0px solid #F2F3F7; background-color: #F2F3F7;margin-left: 15px;margin-top: 10px; "id="select-pid" onchange="func()">
+                    <option value="text">文字</option>
+                    <option value="num">数字</option>
+                    <option value="data">日期</option>
+                </select>
+                <div class = "numlength" style="display: none" >
+                    <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">字段最大长度</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;">*</span>
+                    <input type="number" class="sizelength">
+                    <span class="spannum" style="float: left;display: block;font-size: 12px;width: 100%;margin-left: 15px;
+margin-top: 5px;color: #E51C23; display: none">提示：请输入一个3位数以内整数</span>
+                </div>
+                <p style="font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float: left;
+margin-left: 15px;margin-top: 15px;">是否必填</p><span style="float: left;margin-top: 16px;margin-left: 2px;
+font-family: 'Microsoft YaHei UI';font-size: 16px;color: #E51C23;"></span>
+                <div class="list" style=" float:left;width: 100%;height: 40px;">
+                    <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="是">
+                    <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px;margin-right: 110px;">是</p>
+                    <input type="checkbox" name="choosevariables" onclick="choosevariable(this)" value="否">
+                    <p style="float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;
+margin-left: 7px;margin-top: 10px">否</p>
+                </div>
+            </div>
+            <div id="getoption" class="newly-top" style="display: none;">
+                <div class="new-options" style="width: 370px;height: 40px;float: left;font-family: 'Microsoft YaHei UI';
+box-sizing: border-box;border: 1px solid #1E8DE7;font-size: 14px;color: #1E8DE7;margin-left: 15px;margin-top: 15px;
+text-align: center;line-height: 40px;border-radius: 3px;cursor: pointer;background: url(../image/newly-added-icon.png) no-repeat 140px center;
+background-size: 13px 13px;padding-left: 10px;margin-bottom: 20px" onclick="newxx()">新增选项</div>
+                <div class="option-content" style="width: 100%;height: 200px;overflow-y: scroll;">
+                </div>
+            </div><!--自定义变量选项内容-->
+        </div><!--变量选项-其他变量内容-->
+        <div class="system-bottom" style="width: 100%;height: 54px;border-top: 1px solid #D8D8D8;">
+            <p class="openbtn" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #1E8DE7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #ffffff;text-align: center;line-height: 25px;
+margin-left: 120px;margin-top: 15px; border-radius: 3px;cursor: pointer;" onclick="btn()">确定</p>
+            <span id="gocloses" style="display: inline-block;width: 76px;height: 25px;float: left;background-color: #F2F3F7;
+font-family: 'Microsoft YaHei UI';font-size: 12px;color: #5E6173;text-align: center;line-height: 25px;
+margin-left: 17px;margin-top: 15px;border-radius: 3px; cursor: pointer;">重置</span>
+        </div><!--变量选项-系统变量底部-->
+    </div>
+</div>
+
+
+
+<!--引入jQuery库-->
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript">
+    var fid = localStorage.getItem("fid");
+    var spanValue;
+    window.onload = function () {
+        $.ajax({
+            url: "/templateGet.do?fid="+fid,
+            type: "POST",
+            contentType: "application/json",
+            success: function (data) {
+                $.each(data.tags, function (i, item) {
+                    $(".system-content").append("<div class=\"system-content-list\" style=\"width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;\">\n" +
+                        "                <input type=\"checkbox\" style=\"float: left;width:15px;height: 15px;\n" +
+                        "border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;\" name=\"checkeds\"; onclick=\"choose(this)\"; value="+item+">\n" +
+                        "                <p style=\"float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;\n" +
+                        "line-height: 44px;margin-left: 15px\">"+item+"</p>\n" +
+                        "<input type=\"checkbox\"  style=\"display: none;\" name=\"fentryIds\";  value="+item.fentryId+">\n"+
+                        "            </div>")
+                });
+                $.each(data.templateParMarkDtos, function (i, item){
+                    $(".system-content").append("<div class=\"system-content-list\" style=\"width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;\">\n" +
+                        "                <input type=\"checkbox\"  style=\"float: left;width:15px;height: 15px;\n" +
+                        "border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;\" name=\"checkeds\"; onclick=\"choose(this)\"; value="+item.name+">\n" +
+                        "                <p style=\"float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;\n" +
+                        "line-height: 44px;margin-left: 15px\">"+item.name+"</p>\n" +
+                        // "<span class='fentryIds'>"+item.fentryId+"</span> \n"+
+                        "<input type=\"checkbox\"  style=\"display: none;\" name=\"fentryIds\";  value="+item.fentryId+">\n"+
+                        "            </div>")
+                });
+                $.each(data.templateParOptionDtos, function (i, item){
+                    $(".system-content").append("<div class=\"system-content-list\" style=\"width: 100%;height: 44px;border-bottom: 1px solid #F2F3F7;\">\n" +
+                        "                <input type=\"checkbox\"  style=\"float: left;width:15px;height: 15px;\n" +
+                        "border: 1px solid #1E8DE7;background-color: #ffffff;margin-top: 15px;margin-left: 18px;\" name=\"checkeds\"; onclick=\"choose(this)\"; value="+item.name+">\n" +
+                        "                <p style=\"float: left;font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;\n" +
+                        "line-height: 44px;margin-left: 15px\">"+item.name+"</p>\n" +
+                        "<input type=\"checkbox\"  style=\"display: none;\" name=\"fentryIds\";  value="+item.fentryId+">\n"+
+                        "            </div>")
+                });
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // //alert(XMLHttpRequest.status);
+                // //alert(XMLHttpRequest.readyState);
+                // //alert(textStatus);
+            }
+        });
+            $('#list-left').addClass("system-list-left");
+            $('#list-right').addClass("system-list-right");
+
+            $('#list-right').click(function () {
+                spanValue=$("#list-right").text();
+                $('#list-right').removeClass("system-list-right");
+                $('#list-right').addClass("system-list-left");
+                $('#list-left').addClass("system-list-right");
+                $('#list-left').removeClass("system-list-left");
+                $('.system-content').css('display', 'none');
+                $('.system-content-2').css('display', 'block');
+            });
+            $('#list-left').click(function () {
+                spanValue=$("#list-left").text();
+                // //alert(spanValue);
+                $('#list-left').removeClass("system-list-right");
+                $('#list-left').addClass("system-list-left");
+                $('#list-right').addClass("system-list-right");
+                $('#list-right').removeClass("system-list-left");
+                $('.system-content').css('display', 'block');
+                $('.system-content-2').css('display', 'none');
+            })  // 变量选项内容
+
+        //下拉框选择改变样式
+        $("#select").change(function () {
+            var type = $(this).val();
+            if (type == 'text') {
+                $('#text').css('display', 'block');
+                $('#getoption').css('display', 'none');
+                // $('#clause').css('display', 'none');
+                $('.variables').remove();
+                // $('.getclose').remove();
+            } else if (type == 'getoption') {
+                $('#getoption').css('display', 'block');
+                $('#text').css('display', 'none');
+                // $('#clause').css('display', 'none');
+                $('.variables').remove();
+                // $('.getclose').remove();
+            }
+        });
+
+        $("#gocloses").click(function () {
+            $(".variable").val("");
+            $(".sizelength").val("");
+            $(".option-content").html("");
+            count = 0;
+        });
+
+        //非空判断
+        //变量名正则
+        var open = ['false', 'false'];
+        // var open = false;
+        $(".variable").on('blur', function () {
+            var report = $(".variable").val();
+            var reportItem = trim(report);
+            var byId = document.getElementById("select-pid");
+            var index2 = byId.selectedIndex;
+            //变量类型
+            var text = byId.options[index2].text;
+            if (text == "数字") {
+                var val = $(".sizelength").val();
+                if (reportItem == '' || reportItem == null) {
+                    $(".spanone").css("display", "block");
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color", "#5E6173");
+                } else if (val == '' || val == null) {
+                    $(".spannum").css("display", "block");
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color", "#5E6173");
+                } else {
+                    $(".spannum").css("display", "none");
+                    $(".spanone").css("display", "none");
+                    $(".openbtn").attr("disabled", false);
+                    $(".openbtn").css("background-color", "#1E8DE7");
+                }
+            } else {
+                if (reportItem == '' || reportItem == null) {
+                    $(".spanone").css("display", "block");
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color", "#5E6173");
+                } else {
+                    $(".spanone").css("display", "none");
+                    $(".openbtn").attr("disabled", false);
+                    $(".openbtn").css("background-color", "#1E8DE7");
+                }
+            }
+        });
+        //变量长度正则
+        $(".sizelength").on('blur', function () {
+            var report = $(".variable").val();
+            var reportItem = trim(report);
+            var byId = document.getElementById("select-pid");
+            var index2 = byId.selectedIndex;
+            //变量类型
+            var text = byId.options[index2].text;
+            if (text == "数字") {
+                var val = $(".sizelength").val();
+                if (val == '' || val == null) {
+                    $(".spannum").css("display", "block");
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color", "#5E6173");
+                } else if (reportItem == '' || reportItem == null) {
+                    $(".spanone").css("display", "block");
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color", "#5E6173");
+                } else {
+                    $(".spannum").css("display", "none");
+                    $(".spanone").css("display", "none");
+                    $(".openbtn").attr("disabled", false);
+                    $(".openbtn").css("background-color", "#1E8DE7");
+                }
+            } else {
+                if (reportItem == '' || reportItem == null) {
+                    $(".spanone").css("display", "block");
+                    $(".openbtn").attr("disabled", true);
+                    $(".openbtn").css("background-color", "#5E6173");
+                } else {
+                    $(".spanone").css("display", "none");
+                    $(".openbtn").attr("disabled", false);
+                    $(".openbtn").css("background-color", "#1E8DE7");
+                }
+            }
+        });
+        $(".variable").on('focus', function () {
+            $(".spanone").css("display", "none");
+        });
+        $(".sizelength").on('focus', function () {
+            $(".spannum").css("display", "none");
+        });
+    };
+    //去掉左边空格
+    function ltrim(s)
+    {
+        return s.replace(/(^\s*)/g, '');
+    }
+    //去掉右边空格
+    function rtrim(s)
+    {
+        return s.replace(/(\s*$)/g, '');
+    }
+    //去掉左右空格
+    function trim(s){
+        return rtrim(ltrim(s));
+    }
+    //插入变量选择唯一性
+    function choose(obj){
+        var checkeds = document.getElementsByName("checkeds");
+        for (var i = 0; i <checkeds.length ; i++) {
+            if (checkeds[i]!=obj &&checkeds[i].checked)
+            {
+                checkeds[i].checked=!obj.checked ;
+            }
+        }
+    }
+
+
+    //下拉框选中的时候触发
+    function func(){
+        var byId = document.getElementById("select-pid");
+        var index2 = byId.selectedIndex;
+        //变量类型
+        var text = byId.options[index2].text;
+        if(text=="数字"){
+            $(".numlength").css("display","block");
+            $(".sizelength").focus();
+            if($(".sizelength").val() !='' && $(".variable").val() !=''){
+                $(".openbtn").attr("disabled", false);
+                $(".openbtn").css("background-color","#1E8DE7");
+            }else{
+                $(".openbtn").attr("disabled", true);
+                $(".openbtn").css("background-color","#5E6173");
+            }
+        }else {
+            if( $(".variable").val() !=''){
+                $(".openbtn").attr("disabled", false);
+                $(".openbtn").css("background-color","#1E8DE7");
+            }else{
+                $(".openbtn").attr("disabled", true);
+                $(".openbtn").css("background-color","#5E6173");
+            }
+            $(".numlength").css("display","none");
+        }
+    }
+
+
+    //变量是否必填唯一选择
+    function choosevariable(obj) {
+        var choosevariables = document.getElementsByName("choosevariables");
+        for (var i = 0; i <choosevariables.length ; i++) {
+            if (choosevariables[i]!=obj &&choosevariables[i].checked)
+            {
+                choosevariables[i].checked=!obj.checked ;
+            }
+        }
+    }
+
+
+    //新增下拉选项
+    var count =0;
+    function newxx() {
+        count++;
+        $(".option-content").append("<div class='option-list" + count + "'; style=\"width: 100%;height: 160px;\">\n" +
+            "<p style=\"font-family: 'Microsoft YaHei UI';font-size: 14px;color: #48484A;float:left;\n" +
+            "margin-left:15px;margin-top: 0px;\">选项" + count + "</p><span style=\"float: left;margin-top: 0px;margin-left: 2px;\n" +
+            "font-family:'Microsoft YaHei UI';font-size: 16px;color:#E51C23;\">*</span>" +
+            "<div id='delex" + count + "'; vlaue='" + count + "'; class=\"cutex\" style=\"width: 20px;height: 20px;float:right;margin-top:0px;margin-right:20px;background: url(../image/delete_@2X.png) no-repeat center center;background-size: 15px 15px;cursor: pointer;\" onclick='delexl("+count+")'></div>\n" +
+            "<textarea class=\"option-text\" style=\"width:370px;height: 100px;float: left;margin-left: 15px;border-radius: 3px;\n" +
+            "margin-top: 5px;border:1px solid #979797;box-sizing: border-box;font-size: 14px;font-family: 'Microsoft YaHei UI';\n" +
+            "color: #48484A;\"></textarea></div>");
+        // 按钮删除选中条框
+        delexl = function (arr) {
+            // //alert(arr);
+            $(".option-list" + arr + "").remove();
+        }
+    }
+
+    var spanValue;
+    //条框插入变量确定按钮
+    function btn() {
+        alert("123")
+        // //alert(spanValue)
+        var count = 0;
+        var checkedslist = document.getElementsByName('checkeds');
+        var fentryIdlist = document.getElementsByName("fentryIds");
+        var val;
+        var numberId;
+        // var textareas;
+        // var num;
+        var vab = $(".variable").val();
+        if (spanValue == "全部变量" || spanValue == undefined) {
+            for (var i = 0; i < checkedslist.length; i++) {
+                count++;
+                if (checkedslist[i].checked == true) {
+                    val = checkedslist[i].value;
+                    numberId = fentryIdlist[i].value;
+                    var json = JSON.stringify({
+                        "checkedname": val,
+                        "count": count,
+                        "numberId": numberId
+                    });
+                    localStorage.setItem("InputText", json);
+                    var item = localStorage.getItem("InputText");
+                    // //alert(item)
+                    break;
+                }
+            }
+        }
+        if (spanValue == "其他变量"){
+            // //alert("spanValue=其他变量");
+                    // $("#gocloses").click();
+                    // var textareas = document.getElementById("tarea"+indextextarea+"").value;
+                    // textareas += vab;
+                    //获取目标输入框
+                    // var obj = document.getElementById("tarea"+indextextarea+"");
+                    // num = getCursortPosition(obj);
+                    //光标开始位置
+                    // if(num==textareas.length){
+                    //     document.getElementById("tarea"+indextextarea+"").value = textareas +=val;
+                    // }else//光标结束位置
+                    // if(num==0){
+                    //     document.getElementById("tarea"+indextextarea+"").value = val +=textareas;
+                    // }else {
+                    //光标位置
+                    // document.getElementById("tarea"+indextextarea+"").value=textareas.substring(0, num) + val + textareas.substring(num, textareas.length);
+                    // }
+                    // $("#gocloses").click();
+                    // var textareas = document.getElementById("tarea"+indextextarea+"").value;
+
+                    // var obj = document.getElementById("tarea"+indextextarea+"");
+                    // num = getCursortPosition(obj);
+                    // if(num==textareas.length){
+                    //     document.getElementById("tarea"+indextextarea+"").value = textareas +=vab;
+                    // }else//光标结束位置
+                    // if(num==0){
+                    //     document.getElementById("tarea"+indextextarea+"").value = vab +=textareas;
+                    // }else {
+                    //光标位置
+                    // document.getElementById("tarea"+indextextarea+"").value=textareas.substring(0, num) + vab + textareas.substring(num, textareas.length);
+                    // }
+                    return true;
+        }
+    }
+</script>
+</body>
+</html>

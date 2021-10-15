@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+
+    <!--spring集成rabbitmq-->
+    <rabbit:connection-factory id="connectionFactory"
+                               host="127.0.0.1"
+                               port="5672"
+                               username="guest"
+                               password="guest"
+                               channel-cache-size="5"
+                               virtual-host="/" />
+
+    <rabbit:admin connection-factory="connectionFactory"/>
+    <!--声明队列-->
+    <rabbit:queue durable="true" auto-delete="false" exclusive="false" name="Generate.contract.Yz"/>
+    <rabbit:queue durable="true" auto-delete="false" exclusive="false" name="Generate.contract.Drug"/>
+
+    <!--交换器和队列绑定-->
+    <rabbit:direct-exchange name="exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="Generate.contract.Yz" key="miaosha.tag.key"/>
+            <rabbit:binding queue="Generate.contract.Drug" key="drug.key"/>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <!--spring rabbitmqTemplate声明-->
+    <rabbit:template id="rabbitTemplate"
+                     exchange="exchange"
+                     connection-factory="connectionFactory" />
+
+    <!--消息监听-->
+    <bean id="DrugPurContractConsumer" class="com.pageOfficeServer.mq.DrugPurContractConsumer"/>
+    <bean id="yzCrtGrtConsumer" class="com.pageOfficeServer.mq.YzCrtGrtConsumer"/>
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="auto">
+        <rabbit:listener ref="DrugPurContractConsumer" queues="Generate.contract.Drug"/>
+        <rabbit:listener ref="yzCrtGrtConsumer" queues="Generate.contract.Yz"/>
+    </rabbit:listener-container>
+</beans>
