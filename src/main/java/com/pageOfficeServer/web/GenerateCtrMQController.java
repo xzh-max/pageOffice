@@ -67,10 +67,12 @@ public class GenerateCtrMQController {
                 return BaseResponse.error("模板编号查不到对word模板");
         }
 
+        Calendar cal = Calendar.getInstance();
         JSONObject req=(JSONObject) JSONObject.parse(reqParam);
         req.put("templateNo",templateNo);
         req.put("contractNo", contractNo);
         req.put("subOrAudit",subOrAudit);
+        req.put("mouth",cal.get(Calendar.MONTH+1));
 
         try {
 //            rabbitTemplate.
@@ -84,7 +86,6 @@ public class GenerateCtrMQController {
         if(fileType.length==2){
             //模板如果为docx，生成的合同为docx
 //            url=RelPath()+"download.do?fileName="+contractNo+".docx&type=contract";
-            Calendar cal = Calendar.getInstance();
             String filePath="fileName="+contractNo+".docx&type=contract"+"&mouth="+cal.get(Calendar.MONTH+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
@@ -92,7 +93,6 @@ public class GenerateCtrMQController {
         }
         if(fileType.length==1){
             //模板如果为doc，生成的合同为doc
-            Calendar cal = Calendar.getInstance();
             String filePath="fileName="+contractNo+".doc&type=contract"+"&mouth="+cal.get(Calendar.MONTH+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
@@ -128,10 +128,12 @@ public class GenerateCtrMQController {
         }
 
         System.out.print("请求参数"+reqParam);
+        Calendar cal = Calendar.getInstance();
         JSONObject req=(JSONObject) JSONObject.parse(reqParam);
         req.put("templateNo",templateNo);
         req.put("contractno",contractNo);
         req.put("subOrAudit",subOrAudit);
+        req.put("mouth",cal.get(Calendar.MONTH+1));
 
         try {
             rabbitTemplate.convertAndSend("exchange","drug.key", JSON.toJSONStringWithDateFormat(req,"yyyy-MM-dd", SerializerFeature.WriteDateUseDateFormat));
@@ -145,7 +147,6 @@ public class GenerateCtrMQController {
         if(fileType.length==2){
             //模板如果为docx，生成的合同为docx
 //            url=RelPath()+"download.do?fileName="+contractNo+".docx&type=contract";
-            Calendar cal = Calendar.getInstance();
             String filePath="fileName="+contractNo+".docx&type=contract"+"&mouth="+cal.get(Calendar.MONTH+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
@@ -154,7 +155,6 @@ public class GenerateCtrMQController {
         if(fileType.length==1){
             //模板如果为doc，生成的合同为doc
 //            url=RelPath()+"download.do?fileName="+contractNo+".doc&type=contract";
-            Calendar cal = Calendar.getInstance();
             String filePath="fileName="+contractNo+".doc&type=contract"+"&mouth="+cal.get(Calendar.MONTH+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
