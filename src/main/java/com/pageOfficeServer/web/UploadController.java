@@ -147,13 +147,14 @@ public class UploadController extends HttpServlet {
     BaseResponse uploadPdfs(@RequestParam("imageFile") MultipartFile[] imageFiles, HttpServletRequest request) {//,
         List<String> paths = new ArrayList<>();
         String contractNo = request.getParameter("contractNo");
+        Calendar cal = Calendar.getInstance();
         for (MultipartFile imageFile : imageFiles) {
             String filename = imageFile.getOriginalFilename();
 
             if (StringUtils.isBlank(filename)) {
                 return BaseResponse.error("附件为空，不允许上传");
             }
-            String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + contractNo;
+            String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + cal.get(Calendar.MONTH+1) + "/" + contractNo;
 
             File dir = new File(filePat);//1.新建一个文件夹对象
             if (!dir.exists()) {              //2.检查路径下upload文件夹是否存在
@@ -181,7 +182,7 @@ public class UploadController extends HttpServlet {
             PDFUtil.doc2pdf(filePat + "/" + filename, filePat + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf");
             System.out.print("End======" + new Date());
 
-            Calendar cal = Calendar.getInstance();
+
             String filePath = "fileName=" + contractNo + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH+1);
             String fileId = FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId, filePath);
@@ -206,6 +207,7 @@ public class UploadController extends HttpServlet {
 //        String filename = imageFile.getOriginalFilename();
         String filename = request.getParameter("fileName");
 
+        Calendar cal = Calendar.getInstance();
         if (StringUtils.isBlank(filename)) {
             return BaseResponse.error("附件为空，不允许上传");
         }
@@ -214,7 +216,7 @@ public class UploadController extends HttpServlet {
         if (StringUtils.isBlank(contractNo)) {
             return BaseResponse.error("合同编号不能为空");
         }
-        String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + contractNo;
+        String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + cal.get(Calendar.MONTH+1) + "/" + contractNo;
 
         File dir = new File(filePat);//1.新建一个文件夹对象
         if (!dir.exists()) {              //2.检查路径下upload文件夹是否存在
@@ -238,7 +240,7 @@ public class UploadController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Calendar cal = Calendar.getInstance();
+
         String filePath = "fileName=" + contractNo + "/" + filename + "&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH+1);
         String fileId = FileUtil.getCharAndNumr(20);
         templateParamService.addTemplateFile(fileId, filePath);
