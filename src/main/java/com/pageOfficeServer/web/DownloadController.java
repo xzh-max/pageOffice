@@ -123,8 +123,10 @@ public class DownloadController  extends HttpServlet {
         String[] fs=filePath.split("&type");
         String fileName=fs[0].split("=")[1];
         String type=fs[1].split("=")[1];
-        String mouth=filePath.split("&mouth=")[1];
-
+        String mouth = null;
+        if(filePath.split("=").length>2){
+            mouth=filePath.split("&mouth=")[1];
+        }
         if(!type.equals("contract")&&!type.equals("template")&&!type.equals("esignPdf")){
             return null;
         }

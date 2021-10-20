@@ -142,7 +142,10 @@ public class ReadOnlyController {
             return null;
         }
         String fileName=filePath.split("&type=")[0].split("=")[1];
-        String mouth=filePath.split("&mouth=")[1];
+        String mouth = null;
+        if(filePath.split("=").length>2){
+            mouth=filePath.split("&mouth=")[1];
+        }
 
         ModelAndView modelAndView = new ModelAndView("readContract");
 
