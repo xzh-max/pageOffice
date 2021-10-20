@@ -123,6 +123,7 @@ public class DownloadController  extends HttpServlet {
         String[] fs=filePath.split("&type");
         String fileName=fs[0].split("=")[1];
         String type=fs[1].split("=")[1];
+        String mouth=filePath.split("&mouth=")[1];
 
         if(!type.equals("contract")&&!type.equals("template")&&!type.equals("esignPdf")){
             return null;
@@ -131,7 +132,12 @@ public class DownloadController  extends HttpServlet {
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
 
-        String ctxPath = request.getSession().getServletContext().getRealPath("/")+type+"/";
+        String ctxPath;
+        if("contract".equals(type) && StringUtils.isEmpty(mouth)){
+            ctxPath = request.getSession().getServletContext().getRealPath("/")+type+"/";
+        }else{
+            ctxPath = request.getSession().getServletContext().getRealPath("/")+type+"/"+mouth+"/";
+        }
         String downLoadPath = ctxPath + fileName;
 
         try{

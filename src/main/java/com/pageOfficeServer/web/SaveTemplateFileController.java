@@ -3,6 +3,7 @@ package com.pageOfficeServer.web;
 
 import com.pageOfficeServer.util.FileUtil;
 import com.zhuozhengsoft.pageoffice.FileSaver;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,9 +31,16 @@ public class SaveTemplateFileController extends HttpServlet {
 	public  void  saveContractfile(HttpServletRequest request, HttpServletResponse response){
 		FileSaver fs = new FileSaver(request,response);
 		String contractNo=request.getParameter("contractNo");
+		String mouth=request.getParameter("mouth");
 
+		String filepath;
+		if(StringUtils.isEmpty(mouth)){
+			filepath = request.getSession().getServletContext().getRealPath("") +"/contract/";
+		}else{
+			filepath = request.getSession().getServletContext().getRealPath("") +"/contract/"+mouth;
+		}
 		//合同文件以合同名称命名文件
-		File contractFile=new File(request.getSession().getServletContext().getRealPath("") +"/contract");
+		File contractFile=new File(filepath);
 		if(!contractFile.exists()){
 			contractFile.mkdir();
 		}

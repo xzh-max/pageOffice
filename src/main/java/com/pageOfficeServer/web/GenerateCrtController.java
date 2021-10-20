@@ -58,6 +58,7 @@ public class GenerateCrtController  extends HttpServlet {
                                 @RequestBody String reqParam){
         String templateNo=request.getParameter("templateNo");
         String contractNo=request.getParameter("contractNo");
+        String mouth=request.getParameter("mouth");
 
         FileOutputStream fileOutputStream=null;
 
@@ -89,16 +90,23 @@ public class GenerateCrtController  extends HttpServlet {
         //  获取文件
         String path = FileUtil.getFilePath(rootPath+templateNo);
         XWPFDocument document = null;//读取Word模板
+
+        File dir;
+        String fileName;
+        if(StringUtils.isNotEmpty(mouth)){
+            dir= new File(request.getServletContext().getRealPath("")+"/contract/"+mouth+"/");
+            fileName=request.getServletContext().getRealPath("")+"/contract/"+mouth+"/"+contractNo;
+        }else{
+            dir= new File(request.getServletContext().getRealPath("")+"/contract/");
+            fileName=request.getServletContext().getRealPath("")+"/contract/"+contractNo;
+        }
+        if (!dir.exists()) {// 判断文件目录是否存在
+            dir.mkdirs();
+        }
         try {
             document = new XWPFDocument(POIXMLDocument.openPackage(path));
-
-        docxUtil.searchAndReplace(document, params);//替换模板中的对应变量。
-            File dir= new File(request.getServletContext().getRealPath("")+"/contract/");
-            if (!dir.exists()) {// 判断文件目录是否存在
-                 dir.mkdirs();
-            }
-
-         FileOutputStream os = new FileOutputStream(request.getServletContext().getRealPath("")+"/contract/"+contractNo+".docx");
+            docxUtil.searchAndReplace(document, params);//替换模板中的对应变量。
+            FileOutputStream os = new FileOutputStream(fileName + ".docx");
             document.write(os);
 
         } catch (Exception e) {
@@ -108,7 +116,7 @@ public class GenerateCrtController  extends HttpServlet {
                 docxUtil.close(fileOutputStream);//关闭流
             }
         }
-        PDFUtil.doc2pdf(request.getServletContext().getRealPath("")+"/contract/"+contractNo+".docx",request.getServletContext().getRealPath("")+"/contract/"+contractNo+".pdf");
+        PDFUtil.doc2pdf(fileName+".docx",fileName+".pdf");
         String url=RelPath()+"download.do?fileName="+contractNo+".pdf&type=contract";
         return BaseResponse.success((Object) url);
     }

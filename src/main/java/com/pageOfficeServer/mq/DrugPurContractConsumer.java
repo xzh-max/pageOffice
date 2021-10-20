@@ -10,6 +10,7 @@ import com.pageOfficeServer.util.DocParamProcessUtil;
 import com.pageOfficeServer.util.FileUtil;
 import com.pageOfficeServer.util.WaterMarkUtil;
 import com.pageOfficeServer.util.tableProcessUtil.DynWordUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class DrugPurContractConsumer implements MessageListener {
             String templateNo=req.getString("templateNo");
             String contractNo=req.getString("contractno");
             String subOrAudit=req.getString("subOrAudit");
+            String mouth=req.getString("mouth");
 
             Map<String,Object> params=new HashMap<>();
 
@@ -70,27 +72,42 @@ public class DrugPurContractConsumer implements MessageListener {
 
             String[] fileType=path.split(".doc");
             System.out.print("生成合同开始时间"+new Date());
+            String outPath;
             if(fileType.length==2) {
 
-                File dir = new File(realPath + "/contract/");
+                File dir;
+                if(StringUtils.isEmpty(mouth)){
+                    dir = new File(realPath + "/contract/");
+                }else{
+                    dir = new File(realPath + "/contract/" + mouth +"/");
+                }
                 if (!dir.exists()) {// 判断文件目录是否存在
                     dir.mkdirs();
                 }
-
-                DynWordUtils.process(params, path, realPath + "/contract/" + contractNo + ".docx");
+                if(StringUtils.isEmpty(mouth)){
+                    outPath = realPath + "/contract/" + contractNo + ".docx";
+                }else {
+                    outPath = realPath + "/contract/"+ mouth + "/" + contractNo + ".docx";
+                }
+                DynWordUtils.process(params, path, outPath);
 
                 if("1".equals(subOrAudit)){
                     //审核就添加水印
-                    WaterMarkUtil.addWM(realPath + "/contract/" + contractNo + ".docx","WENS");
+                    WaterMarkUtil.addWM(outPath,"WENS");
                 }
 
             }
 
             if (fileType.length == 1) {
+                if(StringUtils.isEmpty(mouth)){
+                    outPath = realPath + "/contract/" + contractNo;
+                }else {
+                    outPath = realPath + "/contract/" + mouth + "/" + contractNo;
+                }
                 //表示doc类型word文件
-                DynWordUtils.process(params, path, realPath + "/contract/" + contractNo + ".docx");
+                DynWordUtils.process(params, path, outPath + ".docx");
 
-                DocParamProcessUtil.replaceDrugDocFile(path, params, realPath + "/contract/" + contractNo + ".doc");
+                DocParamProcessUtil.replaceDrugDocFile(path, params, outPath + ".doc");
             }
 
             System.out.print("生成合同结束时间"+new Date());

@@ -171,8 +171,14 @@ public class GenerateCtrMQController {
         String fileId=request.getParameter("fileId");
         String filePath=templateParamService.getTemplateFileById(fileId);
         String fileName=filePath.split("&type=")[0].split("=")[1];
+        String mouth=filePath.split("&mouth=")[1];
         //获取文件路径
-        String rootPath =request.getServletContext().getRealPath("")+"/contract/";
+        String rootPath;
+        if(StringUtils.isNotEmpty(mouth)){
+            rootPath =request.getServletContext().getRealPath("")+"/contract/"+mouth+"/";
+        }else{
+            rootPath =request.getServletContext().getRealPath("")+"/contract/";
+        }
         //  获取文件
         if(FileUtil.deleteFileByNo(fileName,rootPath)){
             return BaseResponse.success("删除成功");
@@ -186,17 +192,21 @@ public class GenerateCtrMQController {
     public BaseResponse word2Pdf(HttpServletRequest request){
         String fileName=request.getParameter("fileName");
         String contractNo=request.getParameter("contractNo");
+        String mouth=request.getParameter("mouth");
         //获取文件路径
-        String rootPath =request.getServletContext().getRealPath("")+"/contract/";
+        String rootPath;
+        if(StringUtils.isNotEmpty(mouth)){
+            rootPath =request.getServletContext().getRealPath("")+"/contract/"+mouth+"/";
+        }else{
+            rootPath =request.getServletContext().getRealPath("")+"/contract/";
+        }
         //  获取文件
         if(!FileUtil.fileExit(fileName,rootPath)){
             return BaseResponse.error("文件不存在,转换失败");
         }
 
-        String realPath= servletContext.getRealPath("");
-
         System.out.print("Begin======"+new Date());
-        PDFUtil.doc2pdf(realPath+"/contract/"+fileName,realPath+"/contract/"+contractNo+".pdf");
+        PDFUtil.doc2pdf(rootPath+fileName,rootPath+contractNo+".pdf");
         System.out.print("End======"+new Date());
         Calendar cal = Calendar.getInstance();
         String filePath="fileName="+contractNo+".pdf&type=contract"+"&mouth="+cal.get(Calendar.MONTH+1);

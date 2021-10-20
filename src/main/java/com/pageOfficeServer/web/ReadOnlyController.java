@@ -142,10 +142,16 @@ public class ReadOnlyController {
             return null;
         }
         String fileName=filePath.split("&type=")[0].split("=")[1];
+        String mouth=filePath.split("&mouth=")[1];
 
         ModelAndView modelAndView = new ModelAndView("readContract");
 
-        String rootPath = request.getServletContext().getRealPath("")+"/contract/";
+        String rootPath;
+        if(StringUtils.isNotEmpty(mouth)){
+            rootPath = request.getServletContext().getRealPath("")+"/contract/"+mouth;
+        }else{
+            rootPath = request.getServletContext().getRealPath("")+"/contract/";
+        }
         PageOfficeCtrl poCtrl = new PageOfficeCtrl(request);
 
         poCtrl.setServerPage(request.getContextPath()+"/poserver.zz");

@@ -9,6 +9,7 @@ import com.pageOfficeServer.util.DocParamProcessUtil;
 import com.pageOfficeServer.util.FileUtil;
 import com.pageOfficeServer.util.WaterMarkUtil;
 import com.pageOfficeServer.util.wordUtil.DocxUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ooxml.POIXMLDocument;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.amqp.core.Message;
@@ -49,6 +50,7 @@ public class YzCrtGrtConsumer implements MessageListener{
             String templateNo=req.getString("templateNo");
             String contractNo=req.getString("contractNo");
             String subOrAudit=req.getString("subOrAudit");
+            String mouth=req.getString("mouth");
 
             FileOutputStream fileOutputStream=null;
 
@@ -79,23 +81,30 @@ public class YzCrtGrtConsumer implements MessageListener{
             XWPFDocument document = null;//读取Word模板
             String[] fileType=path.split("\\."+"doc");
             System.out.print("生成合同开始时间"+new Date());
+            String fileName;
             if(fileType.length==2) {
                 //表示docx类型的word文件
                 document = new XWPFDocument(POIXMLDocument.openPackage(path));
 
                 docxUtil.searchAndReplace(document, params);//替换模板中的对应变量。
-                File dir = new File(realPath + "/contract/");
+                File dir;
+                if(StringUtils.isEmpty(mouth)){
+                    dir = new File(realPath + "/contract/");
+                    fileName=servletContext.getRealPath("")+"/contract/"+contractNo;
+                }else{
+                    dir = new File(realPath + "/contract/"+mouth+"/");
+                    fileName=servletContext.getRealPath("")+"/contract/"+mouth+"/"+contractNo;
+                }
                 if (!dir.exists()) {// 判断文件目录是否存在
                     dir.mkdirs();
                 }
-
-                FileOutputStream os = new FileOutputStream(realPath + "/contract/" + contractNo + ".docx");
+                FileOutputStream os = new FileOutputStream(fileName + ".docx");
                 document.write(os);
                 os.close();
 
                 if("1".equals(subOrAudit)){
                     //审核添加水印
-                    WaterMarkUtil.addWM(realPath + "/contract/" + contractNo + ".docx","WENS");
+                    WaterMarkUtil.addWM(fileName + ".docx","WENS");
                 }
 
                 if (null != docxUtil) {
@@ -104,12 +113,16 @@ public class YzCrtGrtConsumer implements MessageListener{
             }
 
                 if (fileType.length == 1) {
-
+                    if(StringUtils.isEmpty(mouth)){
+                        fileName = servletContext.getRealPath("") + "/contract/" + contractNo;
+                    }else{
+                        fileName = servletContext.getRealPath("") + "/contract/" + mouth + "/" + contractNo;
+                    }
                     //表示doc类型word文件
-                    DocParamProcessUtil.replaceDocFile(path, params, realPath + "/contract/" + contractNo + ".doc");
+                    DocParamProcessUtil.replaceDocFile(path, params, fileName + ".doc");
 
                     if("1".equals(subOrAudit)){
-                        WaterMarkUtil.addWM(realPath + "/contract/" + contractNo + ".doc","WENS");
+                        WaterMarkUtil.addWM(fileName + ".doc","WENS");
                     }
 
                 }
