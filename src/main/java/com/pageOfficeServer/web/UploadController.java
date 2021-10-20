@@ -22,10 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -184,7 +181,8 @@ public class UploadController extends HttpServlet {
             PDFUtil.doc2pdf(filePat + "/" + filename, filePat + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf");
             System.out.print("End======" + new Date());
 
-            String filePath = "fileName=" + contractNo + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf&type=esignPdf";
+            Calendar cal = Calendar.getInstance();
+            String filePath = "fileName=" + contractNo + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH+1);
             String fileId = FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId, filePath);
 
@@ -240,7 +238,8 @@ public class UploadController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String filePath = "fileName=" + contractNo + "/" + filename + "&type=esignPdf";
+        Calendar cal = Calendar.getInstance();
+        String filePath = "fileName=" + contractNo + "/" + filename + "&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH+1);
         String fileId = FileUtil.getCharAndNumr(20);
         templateParamService.addTemplateFile(fileId, filePath);
 
