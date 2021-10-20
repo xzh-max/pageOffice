@@ -133,7 +133,7 @@ public class DownloadController  extends HttpServlet {
         BufferedOutputStream bos = null;
 
         String ctxPath;
-        if("contract".equals(type) && StringUtils.isNotEmpty(mouth)){
+        if(!"esignPdf".equals(type) || !"contract".equals(type) && StringUtils.isEmpty(mouth)){
             ctxPath = request.getSession().getServletContext().getRealPath("/")+type+"/";
         }else{
             ctxPath = request.getSession().getServletContext().getRealPath("/")+type+"/"+mouth+"/";
