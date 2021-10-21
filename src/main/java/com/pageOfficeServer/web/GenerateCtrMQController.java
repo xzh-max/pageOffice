@@ -172,7 +172,7 @@ public class GenerateCtrMQController {
         String filePath=templateParamService.getTemplateFileById(fileId);
         String fileName=filePath.split("&type=")[0].split("=")[1];
         String mouth = null;
-        if(filePath.split("=").length>2){
+        if(filePath.split("&").length>2){
             mouth=filePath.split("&mouth=")[1];
         }
         //获取文件路径
