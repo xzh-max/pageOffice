@@ -154,7 +154,7 @@ public class UploadController extends HttpServlet {
             if (StringUtils.isBlank(filename)) {
                 return BaseResponse.error("附件为空，不允许上传");
             }
-            String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + cal.get(Calendar.MONTH+1) + "/" + contractNo;
+            String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + cal.get(Calendar.MONTH)+1 + "/" + contractNo;
 
             File dir = new File(filePat);//1.新建一个文件夹对象
             if (!dir.exists()) {              //2.检查路径下upload文件夹是否存在
@@ -183,7 +183,7 @@ public class UploadController extends HttpServlet {
             System.out.print("End======" + new Date());
 
 
-            String filePath = "fileName=" + contractNo + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH+1);
+            String filePath = "fileName=" + contractNo + "/" + FileUtil.getFileNameBYpath(filename) + ".pdf&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH)+1;
             String fileId = FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId, filePath);
 
@@ -216,7 +216,7 @@ public class UploadController extends HttpServlet {
         if (StringUtils.isBlank(contractNo)) {
             return BaseResponse.error("合同编号不能为空");
         }
-        String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + cal.get(Calendar.MONTH+1) + "/" + contractNo;
+        String filePat = request.getServletContext().getRealPath("") + "/esignPdf/" + cal.get(Calendar.MONTH)+1 + "/" + contractNo;
 
         File dir = new File(filePat);//1.新建一个文件夹对象
         if (!dir.exists()) {              //2.检查路径下upload文件夹是否存在
@@ -241,7 +241,7 @@ public class UploadController extends HttpServlet {
             e.printStackTrace();
         }
 
-        String filePath = "fileName=" + contractNo + "/" + filename + "&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH+1);
+        String filePath = "fileName=" + contractNo + "/" + filename + "&type=esignPdf"+"&mouth="+cal.get(Calendar.MONTH)+1;
         String fileId = FileUtil.getCharAndNumr(20);
         templateParamService.addTemplateFile(fileId, filePath);
 
