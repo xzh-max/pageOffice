@@ -72,7 +72,7 @@ public class GenerateCtrMQController {
         req.put("templateNo",templateNo);
         req.put("contractNo", contractNo);
         req.put("subOrAudit",subOrAudit);
-        req.put("mouth",cal.get(Calendar.MONTH)+1);
+        req.put("mouth",(cal.get(Calendar.MONTH)+1));
 
         try {
 //            rabbitTemplate.
@@ -86,14 +86,14 @@ public class GenerateCtrMQController {
         if(fileType.length==2){
             //模板如果为docx，生成的合同为docx
 //            url=RelPath()+"download.do?fileName="+contractNo+".docx&type=contract";
-            String filePath="fileName="+contractNo+".docx&type=contract"+"&mouth="+cal.get(Calendar.MONTH)+1;
+            String filePath="fileName="+contractNo+".docx&type=contract"+"&mouth="+(cal.get(Calendar.MONTH)+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
             url=RelPath()+"download.do?fileId="+ fileId;
         }
         if(fileType.length==1){
             //模板如果为doc，生成的合同为doc
-            String filePath="fileName="+contractNo+".doc&type=contract"+"&mouth="+cal.get(Calendar.MONTH)+1;
+            String filePath="fileName="+contractNo+".doc&type=contract"+"&mouth="+(cal.get(Calendar.MONTH)+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
             url=RelPath()+"download.do?fileId="+ fileId;
@@ -133,7 +133,7 @@ public class GenerateCtrMQController {
         req.put("templateNo",templateNo);
         req.put("contractno",contractNo);
         req.put("subOrAudit",subOrAudit);
-        req.put("mouth",cal.get(Calendar.MONTH)+1);
+        req.put("mouth",(cal.get(Calendar.MONTH)+1));
 
         try {
             rabbitTemplate.convertAndSend("exchange","drug.key", JSON.toJSONStringWithDateFormat(req,"yyyy-MM-dd", SerializerFeature.WriteDateUseDateFormat));
@@ -147,7 +147,7 @@ public class GenerateCtrMQController {
         if(fileType.length==2){
             //模板如果为docx，生成的合同为docx
 //            url=RelPath()+"download.do?fileName="+contractNo+".docx&type=contract";
-            String filePath="fileName="+contractNo+".docx&type=contract"+"&mouth="+cal.get(Calendar.MONTH)+1;
+            String filePath="fileName="+contractNo+".docx&type=contract"+"&mouth="+(cal.get(Calendar.MONTH)+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
             url=RelPath()+"download.do?fileId="+ fileId;
@@ -155,7 +155,7 @@ public class GenerateCtrMQController {
         if(fileType.length==1){
             //模板如果为doc，生成的合同为doc
 //            url=RelPath()+"download.do?fileName="+contractNo+".doc&type=contract";
-            String filePath="fileName="+contractNo+".doc&type=contract"+"&mouth="+cal.get(Calendar.MONTH)+1;
+            String filePath="fileName="+contractNo+".doc&type=contract"+"&mouth="+(cal.get(Calendar.MONTH)+1);
             String fileId=FileUtil.getCharAndNumr(20);
             templateParamService.addTemplateFile(fileId,filePath);
             url=RelPath()+"download.do?fileId="+ fileId;
@@ -212,7 +212,7 @@ public class GenerateCtrMQController {
         PDFUtil.doc2pdf(rootPath+fileName,rootPath+contractNo+".pdf");
         System.out.print("End======"+new Date());
         Calendar cal = Calendar.getInstance();
-        String filePath="fileName="+contractNo+".pdf&type=contract"+"&mouth="+cal.get(Calendar.MONTH)+1;
+        String filePath="fileName="+contractNo+".pdf&type=contract"+"&mouth="+(cal.get(Calendar.MONTH)+1);
         String fileId=FileUtil.getCharAndNumr(20);
         templateParamService.addTemplateFile(fileId,filePath);
         return BaseResponse.success("转换成功",RelPath()+"download.do?fileId="+fileId);
