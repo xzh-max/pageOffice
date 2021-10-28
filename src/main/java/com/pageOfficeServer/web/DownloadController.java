@@ -126,6 +126,7 @@ public class DownloadController  extends HttpServlet {
         String mouth = null;
         if(filePath.split("&").length>2){
             mouth=filePath.split("&mouth=")[1];
+            type=fs[1].split("&")[0].split("=")[1];
         }
         if(!type.equals("contract")&&!type.equals("template")&&!type.equals("esignPdf")){
             return null;
@@ -170,20 +171,22 @@ public class DownloadController  extends HttpServlet {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
-            if (bis != null)
+            if (bis != null) {
                 try {
                     bis.close();//10.关闭缓存输入流对象
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-            if (bos != null)
+            }
+            if (bos != null) {
                 try {
                     bos.close();//10.关闭缓存输出流对象
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+            }
         }
         return null;
     }
